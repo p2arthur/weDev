@@ -7,19 +7,22 @@ import { VoteProvider } from "./context/vote";
 import { WalletContextProvider } from "./context/wallet";
 import { Providers } from "./services/providers";
 import { LaunchpadProvider } from "./context/launchpad";
+import { WeRepoProvider } from "./context/we-repo";
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <Providers>
-      <LaunchpadProvider>
-        <WalletContextProvider>
-          <VoteProvider>
-            <ToastProvider>
-              <AsaMetadataProvider>{children}</AsaMetadataProvider>
-            </ToastProvider>
-          </VoteProvider>
-        </WalletContextProvider>
-      </LaunchpadProvider>
+      <WeRepoProvider>
+        <LaunchpadProvider>
+          <WalletContextProvider>
+            <VoteProvider>
+              <ToastProvider>
+                <AsaMetadataProvider>{children}</AsaMetadataProvider>
+              </ToastProvider>
+            </VoteProvider>
+          </WalletContextProvider>
+        </LaunchpadProvider>
+      </WeRepoProvider>
     </Providers>
   );
 }

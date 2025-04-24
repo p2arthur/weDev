@@ -43,8 +43,8 @@ export class WeRepo extends Contract {
 
       // Initialize with empty array for dappIds
       this.project(Txn.sender).value = new ProjectData({
-        project_name_des: new arc4.Str(project_name),
         dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+        project_name_des: new arc4.Str(project_name),
       })
 
       // Increment the total number of projects

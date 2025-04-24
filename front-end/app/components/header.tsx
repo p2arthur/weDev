@@ -8,6 +8,7 @@ import { DisconnectButton } from "./disconnectButton";
 import WalletBadge from "./walletBadge";
 import { useNavigate } from "@remix-run/react";
 import NavigateToLaunchpadButton from "./launchpad/NavigateToLaunchpadButton";
+import NavigateToRepo from "./we-repo/NavigateToWerepoButton";
 
 export function Header() {
   const { activeAccount } = useWallet();
@@ -30,6 +31,7 @@ export function Header() {
         {activeAccount ? (
           <div className="flex items-center gap-2">
             <NavigateToLaunchpadButton />
+            <NavigateToRepo />
             <WalletBadge />
             <DisconnectButton />
           </div>

@@ -121,9 +121,9 @@ describe('WeRepo contract', () => {
       sender: projectCreatorAccount.addr,
     })
 
-    console.log('Type 1 Dapp ID (Holders):', type1DappId.returns)
-    console.log('Type 2 Dapp ID (Rewards):', type2DappId.returns)
-    console.log('Type 3 Dapp ID (Governance):', type3DappId.returns)
+    console.log('Type 1 Dapp ID (Holders):', type1DappId.returns?.[0].returnValue)
+    console.log('Type 2 Dapp ID (Rewards):', type2DappId.returns?.[0].returnValue)
+    console.log('Type 3 Dapp ID (Governance):', type3DappId.returns?.[0].returnValue)
 
     // Also test the convenience methods
     const holdersDao = await weRepoClient.send.getProjectHoldersDao({ args: [], sender: projectCreatorAccount.addr })
