@@ -23,6 +23,10 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
   const [description, setDescription] = useState(
     "Description from the front end"
   );
+  const [backgroundColor, setBackgroundColor] = useState("#ffffff");
+  const [primaryColor, setPrimaryColor] = useState("#000000");
+  const [secondaryColor, setSecondaryColor] = useState("#555555");
+  const [accentColor, setAccentColor] = useState("#ff5733");
   const [expiryDate, setExpiryDate] = useState("");
 
   const navigate = useNavigate();
@@ -155,7 +159,6 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               maxLength={100}
             />
           </div>
-
           <div>
             <label className="block text-text font-medium mb-2">
               2 - Select Web3 Tool options for your dApp
@@ -191,7 +194,6 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               Select one or more Web3 tools to include in your dApp.
             </p>
           </div>
-
           {selectedTools.length > 0 && (
             <div className="mt-6">
               <h4 className="text-text font-semibold mb-2">
@@ -273,7 +275,95 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               </div>
             </div>
           )}
-
+          {newAppId && (
+            <div className="flex flex-col gap-4 justify-start items-center mt-8">
+              <h3 className="text-text/70 font-bold">{`Project: ${title} with ${selectedTools.map(
+                (selectedTool) => <p>{selectedTool.name}</p>
+              )}`}</h3>
+              <h3 className="text-text/70 flex gap-1 text-sm">
+                <p>
+                  Successfully created project with ID copy this variable to
+                  your .env:{" "}
+                </p>
+                <span className="text-white font-semibold">
+                  VITE_DAO_CONTRACT_APP_ID:{newAppId}
+                </span>
+              </h3>
+            </div>
+          )}
+          {/* Color Pickers */}
+          <div>
+            <label className="block text-text font-medium mb-2">
+              3 - Choose your project's colors
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-text font-medium">
+                  Background Color
+                </label>
+                <input
+                  type="color"
+                  value={backgroundColor}
+                  onChange={(e) => setBackgroundColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border border-text/10 focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: backgroundColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Primary Color
+                </label>
+                <input
+                  type="color"
+                  value={primaryColor}
+                  onChange={(e) => setPrimaryColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: primaryColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Secondary Color
+                </label>
+                <input
+                  type="color"
+                  value={secondaryColor}
+                  onChange={(e) => setSecondaryColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: secondaryColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Accent Color
+                </label>
+                <input
+                  type="color"
+                  value={accentColor}
+                  onChange={(e) => setAccentColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: accentColor }} // Dynamic color for the picker
+                />
+              </div>
+            </div>
+          </div>
+          {!newAppId && (
+            <div className="flex items-center justify-center mt-8">
+              <MdQuestionAnswer className="w-8 h-8 text-text/50" />
+              <p className="text-text/70 text-sm ml-2">
+                Need help? Check out the{" "}
+                <a
+                  href="https://docs.wedev.xyz"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline"
+                >
+                  documentation
+                </a>{" "}
+                for more information on how to use the WeDev Launchpad.
+              </p>
+            </div>
+          )}{" "}
           <div className="flex justify-end gap-4">
             <button
               type="button"
@@ -286,13 +376,13 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               type="submit"
               disabled={isLoading}
               className={`
-              px-6 py-3 roundedstring-lg font-semibold text-background
-              ${
-                isLoading
-                  ? "bg-primary/50 cursor-not-allowed"
-                  : "bg-primary hover:bg-primary/90 transition-colors"
-              }
-            `}
+          px-6 py-3 roundedstring-lg font-semibold text-background
+          ${
+            isLoading
+              ? "bg-primary/50 cursor-not-allowed"
+              : "bg-primary hover:bg-primary/90 transition-colors"
+          }
+        `}
             >
               {isLoading ? (
                 <div className="flex items-center">
@@ -324,39 +414,6 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
             </button>
           </div>
         </form>
-        {newAppId && (
-          <div className="flex flex-col gap-4 justify-start items-center mt-8">
-            <h3 className="text-text/70 font-bold">{`Project: ${title} with ${selectedTools.map(
-              (selectedTool) => <p>{selectedTool.name}</p>
-            )}`}</h3>
-            <h3 className="text-text/70 flex gap-1 text-sm">
-              <p>
-                Successfully created project with ID copy this variable to your
-                .env:{" "}
-              </p>
-              <span className="text-white font-semibold">
-                VITE_DAO_CONTRACT_APP_ID:{newAppId}
-              </span>
-            </h3>
-          </div>
-        )}
-        {!newAppId && (
-          <div className="flex items-center justify-center mt-8">
-            <MdQuestionAnswer className="w-8 h-8 text-text/50" />
-            <p className="text-text/70 text-sm ml-2">
-              Need help? Check out the{" "}
-              <a
-                href="https://docs.wedev.xyz"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline"
-              >
-                documentation
-              </a>{" "}
-              for more information on how to use the WeDev Launchpad.
-            </p>
-          </div>
-        )}
       </motion.div>
     </div>
   );
