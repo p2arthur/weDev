@@ -3,9 +3,11 @@ import {
   Account,
   arc4,
   assert,
+  baremethod,
   BoxMap,
   Contract,
   GlobalState,
+  LocalState,
   Txn,
   Uint64,
   uint64,
@@ -24,6 +26,12 @@ export class WeRepo extends Contract {
   // Save a project box map
   project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
 
+  project_username = LocalState<string>()
+  project_background_color = LocalState<uint64>()
+  project_primary_color = LocalState<uint64>()
+  project_secondary_color = LocalState<uint64>()
+  project_accent_color = LocalState<uint64>()
+
   @abimethod({ onCreate: 'require', allowActions: 'NoOp' })
   public createApplication(): void {
     // Sets the manager address to be equal to the sender of the transaction
@@ -33,9 +41,21 @@ export class WeRepo extends Contract {
     this.total_projects.value = 0
   }
 
+  @baremethod()
+  deleteApplication() {}
+
+  optInToApplication() {}
+
   // Method to create a new project into the repo
   @abimethod({ allowActions: 'NoOp' })
-  public createNewProject(project_name: string): void {
+  public createNewProject(
+    project_name: string,
+    project_username: string,
+    background_color: uint64,
+    primary_color: uint64,
+    secondary_color: uint64,
+    accent_color: uint64,
+  ): void {
     // First check if the box exists, if not create it
     if (!this.project(Txn.sender).exists) {
       // Create the box with appropriate size
@@ -44,14 +64,22 @@ export class WeRepo extends Contract {
       // Initialize with empty array for dappIds
       this.project(Txn.sender).value = new ProjectData({
         dappIds: new arc4.DynamicArray<arc4.UintN64>(),
-        project_name_des: new arc4.Str(project_name),
+        project_reputation: new arc4.UintN64(1),
+        project_contribution: new arc4.UintN64(1),
+        project_name: new arc4.Str(project_name),
       })
+
+      this.project_username(Txn.sender).value = project_username
+      this.project_background_color(Txn.sender).value = background_color
+      this.project_primary_color(Txn.sender).value = primary_color
+      this.project_secondary_color(Txn.sender).value = secondary_color
+      this.project_accent_color(Txn.sender).value = accent_color
 
       // Increment the total number of projects
       this.total_projects.value = Uint64(this.total_projects.value + 1)
     } else {
       // Just update the name if project already exists
-      this.project(Txn.sender).value.project_name_des = new arc4.Str(project_name)
+      this.project(Txn.sender).value.project_name = new arc4.Str(project_name)
     }
   }
 
@@ -60,18 +88,35 @@ export class WeRepo extends Contract {
     // Assert that the box exists before updating
     assert(this.project(Txn.sender).exists, 'Project created by the given address does not exist')
 
-    this.project(Txn.sender).value.project_name_des = new arc4.Str(new_project_name)
+    this.project(Txn.sender).value.project_name = new arc4.Str(new_project_name)
   }
 
   @abimethod({ allowActions: 'NoOp' })
-  public createProjectMicroDapp(dappId: uint64, type: uint64): void {
+  public updateProjectColors(
+    background_color: uint64,
+    primary_color: uint64,
+    secondary_color: uint64,
+    accent_color: uint64,
+  ): void {
+    // Assert that the user opted in to the contract
+    assert(this.project_username(Txn.sender).hasValue, 'User has not opted in to the contract')
+    this.project_background_color(Txn.sender).value = background_color
+    this.project_primary_color(Txn.sender).value = primary_color
+    this.project_secondary_color(Txn.sender).value = secondary_color
+    this.project_accent_color(Txn.sender).value = accent_color
+  }
+
+  @abimethod({ allowActions: 'NoOp' })
+  public createProjectMicroDapp(dappId: uint64, type: uint64, creatorAddress: Account): void {
     // Check if the box exists first
     if (!this.project(Txn.sender).exists) {
       // Create and initialize the box if it doesn't exist
       this.project(Txn.sender).create({ size: 500 })
       this.project(Txn.sender).value = new ProjectData({
-        project_name_des: new arc4.Str(''),
+        project_name: new arc4.Str(''),
         dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+        project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+        project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
       })
 
       // Increment the total number of projects
@@ -79,7 +124,7 @@ export class WeRepo extends Contract {
     }
 
     // Get the current dappIds array
-    const dappIds = this.project(Txn.sender).value.dappIds.copy()
+    const dappIds = this.project(creatorAddress).value.dappIds.copy()
 
     // Expand the array if needed to accommodate the type index
     while (dappIds.length < type) {
@@ -96,7 +141,7 @@ export class WeRepo extends Contract {
   @abimethod({ allowActions: 'NoOp', readonly: true })
   public getProjectName(): string {
     assert(this.project(Txn.sender).exists, 'Project does not exist')
-    return this.project(Txn.sender).value.project_name_des.native
+    return this.project(Txn.sender).value.project_name.native
   }
 
   @abimethod({ allowActions: 'NoOp', readonly: true })

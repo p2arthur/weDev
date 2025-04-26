@@ -3,24 +3,24 @@
 
 // @algorandfoundation/algorand-typescript/arc4/index.d.ts::Contract.approvalProgram() -> uint64:
 main:
-    intcblock 0 1 2 8
-    bytecblock "_p" 0x151f7c75 "total_projects" 0x0000000000000000
-    // smart_contracts/we_repo/contract.algo.ts:17
+    intcblock 1 0 18 16
+    bytecblock "_p" 0x151f7c75 "total_projects" 0x0000000000000000 "project_username" "project_background_color" "project_primary_color" "project_secondary_color" "project_accent_color" 0x0000
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
     txn NumAppArgs
-    bz main_after_if_else@15
-    pushbytess 0xb8447b36 0xb6113dc7 0xf83918ba 0x8246c525 0x2557f664 0xea638972 0xe9894450 0x8dc0b23e 0x1d77c9f1 // method "createApplication()void", method "createNewProject(string)void", method "updateProjectName(string)void", method "createProjectMicroDapp(uint64,uint64)void", method "getProjectName()string", method "getDappIdByType(uint64)uint64", method "getAllDappIds()uint64[]", method "getProjectHoldersDao()uint64", method "getProjectRewardsDao()uint64"
+    bz main_bare_routing@16
+    pushbytess 0xb8447b36 0x01a3a3ff 0xc44bd7ad 0xf83918ba 0x1bfcb938 0xe39a499e 0x2557f664 0xea638972 0xe9894450 0x8dc0b23e 0x1d77c9f1 // method "createApplication()void", method "optInToApplication()void", method "createNewProject(string,string,uint64,uint64,uint64,uint64)void", method "updateProjectName(string)void", method "updateProjectColors(uint64,uint64,uint64,uint64)void", method "createProjectMicroDapp(uint64,uint64,account)void", method "getProjectName()string", method "getDappIdByType(uint64)uint64", method "getAllDappIds()uint64[]", method "getProjectHoldersDao()uint64", method "getProjectRewardsDao()uint64"
     txna ApplicationArgs 0
-    match main_createApplication_route@3 main_createNewProject_route@4 main_updateProjectName_route@5 main_createProjectMicroDapp_route@6 main_getProjectName_route@7 main_getDappIdByType_route@8 main_getAllDappIds_route@9 main_getProjectHoldersDao_route@10 main_getProjectRewardsDao_route@11
+    match main_createApplication_route@3 main_optInToApplication_route@4 main_createNewProject_route@5 main_updateProjectName_route@6 main_updateProjectColors_route@7 main_createProjectMicroDapp_route@8 main_getProjectName_route@9 main_getDappIdByType_route@10 main_getAllDappIds_route@11 main_getProjectHoldersDao_route@12 main_getProjectRewardsDao_route@13
 
-main_after_if_else@15:
-    // smart_contracts/we_repo/contract.algo.ts:17
+main_after_if_else@20:
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
-    intc_0 // 0
+    intc_1 // 0
     return
 
-main_getProjectRewardsDao_route@11:
-    // smart_contracts/we_repo/contract.algo.ts:129
+main_getProjectRewardsDao_route@13:
+    // smart_contracts/we_repo/contract.algo.ts:174
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     txn OnCompletion
     !
@@ -32,11 +32,11 @@ main_getProjectRewardsDao_route@11:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_getProjectHoldersDao_route@10:
-    // smart_contracts/we_repo/contract.algo.ts:122
+main_getProjectHoldersDao_route@12:
+    // smart_contracts/we_repo/contract.algo.ts:167
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     txn OnCompletion
     !
@@ -48,11 +48,11 @@ main_getProjectHoldersDao_route@10:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_getAllDappIds_route@9:
-    // smart_contracts/we_repo/contract.algo.ts:115
+main_getAllDappIds_route@11:
+    // smart_contracts/we_repo/contract.algo.ts:160
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     txn OnCompletion
     !
@@ -64,22 +64,22 @@ main_getAllDappIds_route@9:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_getDappIdByType_route@8:
-    // smart_contracts/we_repo/contract.algo.ts:102
+main_getDappIdByType_route@10:
+    // smart_contracts/we_repo/contract.algo.ts:147
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/we_repo/contract.algo.ts:17
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
     txna ApplicationArgs 1
     btoi
-    // smart_contracts/we_repo/contract.algo.ts:102
+    // smart_contracts/we_repo/contract.algo.ts:147
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     callsub getDappIdByType
     itob
@@ -87,11 +87,11 @@ main_getDappIdByType_route@8:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_getProjectName_route@7:
-    // smart_contracts/we_repo/contract.algo.ts:96
+main_getProjectName_route@9:
+    // smart_contracts/we_repo/contract.algo.ts:141
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     txn OnCompletion
     !
@@ -109,67 +109,116 @@ main_getProjectName_route@7:
     swap
     concat
     log
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_createProjectMicroDapp_route@6:
-    // smart_contracts/we_repo/contract.algo.ts:66
+main_createProjectMicroDapp_route@8:
+    // smart_contracts/we_repo/contract.algo.ts:109
     // @abimethod({ allowActions: 'NoOp' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/we_repo/contract.algo.ts:17
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
     txna ApplicationArgs 1
     btoi
     txna ApplicationArgs 2
     btoi
-    // smart_contracts/we_repo/contract.algo.ts:66
+    txna ApplicationArgs 3
+    btoi
+    txnas Accounts
+    // smart_contracts/we_repo/contract.algo.ts:109
     // @abimethod({ allowActions: 'NoOp' })
     callsub createProjectMicroDapp
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_updateProjectName_route@5:
-    // smart_contracts/we_repo/contract.algo.ts:58
+main_updateProjectColors_route@7:
+    // smart_contracts/we_repo/contract.algo.ts:94
     // @abimethod({ allowActions: 'NoOp' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/we_repo/contract.algo.ts:17
+    // smart_contracts/we_repo/contract.algo.ts:19
+    // export class WeRepo extends Contract {
+    txna ApplicationArgs 1
+    btoi
+    txna ApplicationArgs 2
+    btoi
+    txna ApplicationArgs 3
+    btoi
+    txna ApplicationArgs 4
+    btoi
+    // smart_contracts/we_repo/contract.algo.ts:94
+    // @abimethod({ allowActions: 'NoOp' })
+    callsub updateProjectColors
+    intc_0 // 1
+    return
+
+main_updateProjectName_route@6:
+    // smart_contracts/we_repo/contract.algo.ts:86
+    // @abimethod({ allowActions: 'NoOp' })
+    txn OnCompletion
+    !
+    assert // OnCompletion is not NoOp
+    txn ApplicationID
+    assert // can only call when not creating
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // smart_contracts/we_repo/contract.algo.ts:58
+    // smart_contracts/we_repo/contract.algo.ts:86
     // @abimethod({ allowActions: 'NoOp' })
     callsub updateProjectName
-    intc_1 // 1
+    intc_0 // 1
     return
 
-main_createNewProject_route@4:
-    // smart_contracts/we_repo/contract.algo.ts:37
+main_createNewProject_route@5:
+    // smart_contracts/we_repo/contract.algo.ts:50
     // @abimethod({ allowActions: 'NoOp' })
     txn OnCompletion
     !
     assert // OnCompletion is not NoOp
     txn ApplicationID
     assert // can only call when not creating
-    // smart_contracts/we_repo/contract.algo.ts:17
+    // smart_contracts/we_repo/contract.algo.ts:19
     // export class WeRepo extends Contract {
     txna ApplicationArgs 1
     extract 2 0
-    // smart_contracts/we_repo/contract.algo.ts:37
+    txna ApplicationArgs 2
+    extract 2 0
+    txna ApplicationArgs 3
+    btoi
+    txna ApplicationArgs 4
+    btoi
+    txna ApplicationArgs 5
+    btoi
+    txna ApplicationArgs 6
+    btoi
+    // smart_contracts/we_repo/contract.algo.ts:50
     // @abimethod({ allowActions: 'NoOp' })
     callsub createNewProject
-    intc_1 // 1
+    intc_0 // 1
+    return
+
+main_optInToApplication_route@4:
+    // smart_contracts/we_repo/contract.algo.ts:47
+    // optInToApplication() {}
+    txn OnCompletion
+    intc_0 // OptIn
+    ==
+    assert // OnCompletion is not OptIn
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
     return
 
 main_createApplication_route@3:
-    // smart_contracts/we_repo/contract.algo.ts:27
+    // smart_contracts/we_repo/contract.algo.ts:35
     // @abimethod({ onCreate: 'require', allowActions: 'NoOp' })
     txn OnCompletion
     !
@@ -178,144 +227,221 @@ main_createApplication_route@3:
     !
     assert // can only call when creating
     callsub createApplication
-    intc_1 // 1
+    intc_0 // 1
+    return
+
+main_bare_routing@16:
+    // smart_contracts/we_repo/contract.algo.ts:19
+    // export class WeRepo extends Contract {
+    pushint 5 // 5
+    txn OnCompletion
+    match main_deleteApplication@17
+    b main_after_if_else@20
+
+main_deleteApplication@17:
+    // smart_contracts/we_repo/contract.algo.ts:44
+    // @baremethod()
+    txn ApplicationID
+    assert // can only call when not creating
+    intc_0 // 1
     return
 
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.createApplication() -> void:
 createApplication:
-    // smart_contracts/we_repo/contract.algo.ts:19
+    // smart_contracts/we_repo/contract.algo.ts:21
     // manager_address = GlobalState<Account>()
     pushbytes "manager_address"
-    // smart_contracts/we_repo/contract.algo.ts:30
+    // smart_contracts/we_repo/contract.algo.ts:38
     // this.manager_address.value = Txn.sender
     txn Sender
     app_global_put
-    // smart_contracts/we_repo/contract.algo.ts:22
+    // smart_contracts/we_repo/contract.algo.ts:24
     // total_projects = GlobalState<uint64>()
     bytec_2 // "total_projects"
-    // smart_contracts/we_repo/contract.algo.ts:33
+    // smart_contracts/we_repo/contract.algo.ts:41
     // this.total_projects.value = 0
-    intc_0 // 0
+    intc_1 // 0
     app_global_put
     retsub
 
 
-// smart_contracts/we_repo/contract.algo.ts::WeRepo.createNewProject(project_name: bytes) -> void:
+// smart_contracts/we_repo/contract.algo.ts::WeRepo.createNewProject(project_name: bytes, project_username: bytes, background_color: uint64, primary_color: uint64, secondary_color: uint64, accent_color: uint64) -> void:
 createNewProject:
-    // smart_contracts/we_repo/contract.algo.ts:37-38
+    // smart_contracts/we_repo/contract.algo.ts:50-58
     // @abimethod({ allowActions: 'NoOp' })
-    // public createNewProject(project_name: string): void {
-    proto 1 0
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // public createNewProject(
+    //   project_name: string,
+    //   project_username: string,
+    //   background_color: uint64,
+    //   primary_color: uint64,
+    //   secondary_color: uint64,
+    //   accent_color: uint64,
+    // ): void {
+    proto 6 0
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:40
+    // smart_contracts/we_repo/contract.algo.ts:60
     // if (!this.project(Txn.sender).exists) {
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:40
+    // smart_contracts/we_repo/contract.algo.ts:60
     // if (!this.project(Txn.sender).exists) {
     box_len
     bury 1
     bnz createNewProject_else_body@2
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:42
+    // smart_contracts/we_repo/contract.algo.ts:62
     // this.project(Txn.sender).create({ size: 500 })
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:42
+    // smart_contracts/we_repo/contract.algo.ts:62
     // this.project(Txn.sender).create({ size: 500 })
     pushint 500 // 500
     box_create
     pop
-    // smart_contracts/we_repo/contract.algo.ts:47
-    // project_name_des: new arc4.Str(project_name),
-    frame_dig -1
+    // smart_contracts/we_repo/contract.algo.ts:69
+    // project_name: new arc4.Str(project_name),
+    frame_dig -6
     len
     itob
     extract 6 2
-    frame_dig -1
+    frame_dig -6
     concat
-    // smart_contracts/we_repo/contract.algo.ts:45-48
+    // smart_contracts/we_repo/contract.algo.ts:65-70
     // this.project(Txn.sender).value = new ProjectData({
     //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
-    //   project_name_des: new arc4.Str(project_name),
+    //   project_reputation: new arc4.UintN64(1),
+    //   project_contribution: new arc4.UintN64(1),
+    //   project_name: new arc4.Str(project_name),
     // })
-    pushbytes 0x000400060000
+    pushbytes 0x00000000000000010000000000000001001400160000
     swap
     concat
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:45
+    // smart_contracts/we_repo/contract.algo.ts:65
     // this.project(Txn.sender).value = new ProjectData({
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:45-48
+    // smart_contracts/we_repo/contract.algo.ts:65-70
     // this.project(Txn.sender).value = new ProjectData({
     //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
-    //   project_name_des: new arc4.Str(project_name),
+    //   project_reputation: new arc4.UintN64(1),
+    //   project_contribution: new arc4.UintN64(1),
+    //   project_name: new arc4.Str(project_name),
     // })
     dup
     box_del
     pop
     swap
     box_put
-    // smart_contracts/we_repo/contract.algo.ts:22
+    // smart_contracts/we_repo/contract.algo.ts:72
+    // this.project_username(Txn.sender).value = project_username
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:29
+    // project_username = LocalState<string>()
+    bytec 4 // "project_username"
+    // smart_contracts/we_repo/contract.algo.ts:72
+    // this.project_username(Txn.sender).value = project_username
+    frame_dig -5
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:73
+    // this.project_background_color(Txn.sender).value = background_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:30
+    // project_background_color = LocalState<uint64>()
+    bytec 5 // "project_background_color"
+    // smart_contracts/we_repo/contract.algo.ts:73
+    // this.project_background_color(Txn.sender).value = background_color
+    frame_dig -4
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:74
+    // this.project_primary_color(Txn.sender).value = primary_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:31
+    // project_primary_color = LocalState<uint64>()
+    bytec 6 // "project_primary_color"
+    // smart_contracts/we_repo/contract.algo.ts:74
+    // this.project_primary_color(Txn.sender).value = primary_color
+    frame_dig -3
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:75
+    // this.project_secondary_color(Txn.sender).value = secondary_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:32
+    // project_secondary_color = LocalState<uint64>()
+    bytec 7 // "project_secondary_color"
+    // smart_contracts/we_repo/contract.algo.ts:75
+    // this.project_secondary_color(Txn.sender).value = secondary_color
+    frame_dig -2
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:76
+    // this.project_accent_color(Txn.sender).value = accent_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:33
+    // project_accent_color = LocalState<uint64>()
+    bytec 8 // "project_accent_color"
+    // smart_contracts/we_repo/contract.algo.ts:76
+    // this.project_accent_color(Txn.sender).value = accent_color
+    frame_dig -1
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:24
     // total_projects = GlobalState<uint64>()
-    intc_0 // 0
+    intc_1 // 0
     bytec_2 // "total_projects"
     app_global_get_ex
     assert // check GlobalState exists
-    // smart_contracts/we_repo/contract.algo.ts:51
+    // smart_contracts/we_repo/contract.algo.ts:79
     // this.total_projects.value = Uint64(this.total_projects.value + 1)
-    intc_1 // 1
+    intc_0 // 1
     +
-    // smart_contracts/we_repo/contract.algo.ts:22
+    // smart_contracts/we_repo/contract.algo.ts:24
     // total_projects = GlobalState<uint64>()
     bytec_2 // "total_projects"
-    // smart_contracts/we_repo/contract.algo.ts:51
+    // smart_contracts/we_repo/contract.algo.ts:79
     // this.total_projects.value = Uint64(this.total_projects.value + 1)
     swap
     app_global_put
     retsub
 
 createNewProject_else_body@2:
-    // smart_contracts/we_repo/contract.algo.ts:54
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(project_name)
-    frame_dig -1
+    // smart_contracts/we_repo/contract.algo.ts:82
+    // this.project(Txn.sender).value.project_name = new arc4.Str(project_name)
+    frame_dig -6
     len
     itob
     extract 6 2
-    frame_dig -1
+    frame_dig -6
     concat
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:54
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(project_name)
+    // smart_contracts/we_repo/contract.algo.ts:82
+    // this.project(Txn.sender).value.project_name = new arc4.Str(project_name)
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:54
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(project_name)
+    // smart_contracts/we_repo/contract.algo.ts:82
+    // this.project(Txn.sender).value.project_name = new arc4.Str(project_name)
     dup
     box_get
     assert // Box must have value
     dup
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
-    intc_0 // 0
+    intc_1 // 0
     swap
     extract3
     uncover 2
@@ -329,50 +455,50 @@ createNewProject_else_body@2:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.updateProjectName(new_project_name: bytes) -> void:
 updateProjectName:
-    // smart_contracts/we_repo/contract.algo.ts:58-59
+    // smart_contracts/we_repo/contract.algo.ts:86-87
     // @abimethod({ allowActions: 'NoOp' })
     // public updateProjectName(new_project_name: string): void {
     proto 1 0
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:61
+    // smart_contracts/we_repo/contract.algo.ts:89
     // assert(this.project(Txn.sender).exists, 'Project created by the given address does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:61
+    // smart_contracts/we_repo/contract.algo.ts:89
     // assert(this.project(Txn.sender).exists, 'Project created by the given address does not exist')
     box_len
     bury 1
     assert // Project created by the given address does not exist
-    // smart_contracts/we_repo/contract.algo.ts:63
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(new_project_name)
+    // smart_contracts/we_repo/contract.algo.ts:91
+    // this.project(Txn.sender).value.project_name = new arc4.Str(new_project_name)
     frame_dig -1
     len
     itob
     extract 6 2
     frame_dig -1
     concat
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:63
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(new_project_name)
+    // smart_contracts/we_repo/contract.algo.ts:91
+    // this.project(Txn.sender).value.project_name = new arc4.Str(new_project_name)
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:63
-    // this.project(Txn.sender).value.project_name_des = new arc4.Str(new_project_name)
+    // smart_contracts/we_repo/contract.algo.ts:91
+    // this.project(Txn.sender).value.project_name = new arc4.Str(new_project_name)
     dup
     box_get
     assert // Box must have value
     dup
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
-    intc_0 // 0
+    intc_1 // 0
     swap
     extract3
     uncover 2
@@ -384,118 +510,252 @@ updateProjectName:
     retsub
 
 
-// smart_contracts/we_repo/contract.algo.ts::WeRepo.createProjectMicroDapp(dappId: uint64, type: uint64) -> void:
-createProjectMicroDapp:
-    // smart_contracts/we_repo/contract.algo.ts:66-67
+// smart_contracts/we_repo/contract.algo.ts::WeRepo.updateProjectColors(background_color: uint64, primary_color: uint64, secondary_color: uint64, accent_color: uint64) -> void:
+updateProjectColors:
+    // smart_contracts/we_repo/contract.algo.ts:94-100
     // @abimethod({ allowActions: 'NoOp' })
-    // public createProjectMicroDapp(dappId: uint64, type: uint64): void {
-    proto 2 0
-    intc_0 // 0
+    // public updateProjectColors(
+    //   background_color: uint64,
+    //   primary_color: uint64,
+    //   secondary_color: uint64,
+    //   accent_color: uint64,
+    // ): void {
+    proto 4 0
+    // smart_contracts/we_repo/contract.algo.ts:102
+    // assert(this.project_username(Txn.sender).hasValue, 'User has not opted in to the contract')
+    txn Sender
+    intc_1 // 0
+    // smart_contracts/we_repo/contract.algo.ts:29
+    // project_username = LocalState<string>()
+    bytec 4 // "project_username"
+    // smart_contracts/we_repo/contract.algo.ts:102
+    // assert(this.project_username(Txn.sender).hasValue, 'User has not opted in to the contract')
+    app_local_get_ex
+    bury 1
+    assert // User has not opted in to the contract
+    // smart_contracts/we_repo/contract.algo.ts:103
+    // this.project_background_color(Txn.sender).value = background_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:30
+    // project_background_color = LocalState<uint64>()
+    bytec 5 // "project_background_color"
+    // smart_contracts/we_repo/contract.algo.ts:103
+    // this.project_background_color(Txn.sender).value = background_color
+    frame_dig -4
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:104
+    // this.project_primary_color(Txn.sender).value = primary_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:31
+    // project_primary_color = LocalState<uint64>()
+    bytec 6 // "project_primary_color"
+    // smart_contracts/we_repo/contract.algo.ts:104
+    // this.project_primary_color(Txn.sender).value = primary_color
+    frame_dig -3
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:105
+    // this.project_secondary_color(Txn.sender).value = secondary_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:32
+    // project_secondary_color = LocalState<uint64>()
+    bytec 7 // "project_secondary_color"
+    // smart_contracts/we_repo/contract.algo.ts:105
+    // this.project_secondary_color(Txn.sender).value = secondary_color
+    frame_dig -2
+    app_local_put
+    // smart_contracts/we_repo/contract.algo.ts:106
+    // this.project_accent_color(Txn.sender).value = accent_color
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:33
+    // project_accent_color = LocalState<uint64>()
+    bytec 8 // "project_accent_color"
+    // smart_contracts/we_repo/contract.algo.ts:106
+    // this.project_accent_color(Txn.sender).value = accent_color
+    frame_dig -1
+    app_local_put
+    retsub
+
+
+// smart_contracts/we_repo/contract.algo.ts::WeRepo.createProjectMicroDapp(dappId: uint64, type: uint64, creatorAddress: bytes) -> void:
+createProjectMicroDapp:
+    // smart_contracts/we_repo/contract.algo.ts:109-110
+    // @abimethod({ allowActions: 'NoOp' })
+    // public createProjectMicroDapp(dappId: uint64, type: uint64, creatorAddress: Account): void {
+    proto 3 0
+    intc_1 // 0
     pushbytes ""
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:69
+    // smart_contracts/we_repo/contract.algo.ts:112
     // if (!this.project(Txn.sender).exists) {
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:69
+    // smart_contracts/we_repo/contract.algo.ts:112
     // if (!this.project(Txn.sender).exists) {
     box_len
     bury 1
     bnz createProjectMicroDapp_after_if_else@2
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:71
+    // smart_contracts/we_repo/contract.algo.ts:114
     // this.project(Txn.sender).create({ size: 500 })
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:71
+    // smart_contracts/we_repo/contract.algo.ts:114
     // this.project(Txn.sender).create({ size: 500 })
     pushint 500 // 500
     box_create
     pop
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:72
-    // this.project(Txn.sender).value = new ProjectData({
+    // smart_contracts/we_repo/contract.algo.ts:118
+    // project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:72-75
+    // smart_contracts/we_repo/contract.algo.ts:118
+    // project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+    box_get
+    assert // Box must have value
+    intc_1 // 0
+    extract_uint64
+    pushint 5 // 5
+    +
+    itob
+    // smart_contracts/we_repo/contract.algo.ts:27
+    // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
+    bytec_0 // "_p"
+    // smart_contracts/we_repo/contract.algo.ts:119
+    // project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:27
+    // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
+    concat
+    // smart_contracts/we_repo/contract.algo.ts:119
+    // project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+    box_get
+    assert // Box must have value
+    pushint 8 // 8
+    extract_uint64
+    pushint 5 // 5
+    +
+    itob
+    // smart_contracts/we_repo/contract.algo.ts:115-120
     // this.project(Txn.sender).value = new ProjectData({
-    //   project_name_des: new arc4.Str(''),
+    //   project_name: new arc4.Str(''),
     //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+    //   project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+    //   project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+    // })
+    concat
+    pushbytes 0x0014
+    concat
+    pushbytes 0x0016
+    concat
+    // smart_contracts/we_repo/contract.algo.ts:117
+    // dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+    bytec 9 // 0x0000
+    // smart_contracts/we_repo/contract.algo.ts:115-120
+    // this.project(Txn.sender).value = new ProjectData({
+    //   project_name: new arc4.Str(''),
+    //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+    //   project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+    //   project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+    // })
+    concat
+    // smart_contracts/we_repo/contract.algo.ts:116
+    // project_name: new arc4.Str(''),
+    bytec 9 // 0x0000
+    // smart_contracts/we_repo/contract.algo.ts:115-120
+    // this.project(Txn.sender).value = new ProjectData({
+    //   project_name: new arc4.Str(''),
+    //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+    //   project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+    //   project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+    // })
+    concat
+    // smart_contracts/we_repo/contract.algo.ts:27
+    // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
+    bytec_0 // "_p"
+    // smart_contracts/we_repo/contract.algo.ts:115
+    // this.project(Txn.sender).value = new ProjectData({
+    txn Sender
+    // smart_contracts/we_repo/contract.algo.ts:27
+    // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
+    concat
+    // smart_contracts/we_repo/contract.algo.ts:115-120
+    // this.project(Txn.sender).value = new ProjectData({
+    //   project_name: new arc4.Str(''),
+    //   dappIds: new arc4.DynamicArray<arc4.UintN64>(),
+    //   project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
+    //   project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
     // })
     dup
     box_del
     pop
-    pushbytes 0x0004000600000000
+    swap
     box_put
-    // smart_contracts/we_repo/contract.algo.ts:22
+    // smart_contracts/we_repo/contract.algo.ts:24
     // total_projects = GlobalState<uint64>()
-    intc_0 // 0
+    intc_1 // 0
     bytec_2 // "total_projects"
     app_global_get_ex
     assert // check GlobalState exists
-    // smart_contracts/we_repo/contract.algo.ts:78
+    // smart_contracts/we_repo/contract.algo.ts:123
     // this.total_projects.value = Uint64(this.total_projects.value + 1)
-    intc_1 // 1
+    intc_0 // 1
     +
-    // smart_contracts/we_repo/contract.algo.ts:22
+    // smart_contracts/we_repo/contract.algo.ts:24
     // total_projects = GlobalState<uint64>()
     bytec_2 // "total_projects"
-    // smart_contracts/we_repo/contract.algo.ts:78
+    // smart_contracts/we_repo/contract.algo.ts:123
     // this.total_projects.value = Uint64(this.total_projects.value + 1)
     swap
     app_global_put
 
 createProjectMicroDapp_after_if_else@2:
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:82
-    // const dappIds = this.project(Txn.sender).value.dappIds.copy()
-    txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
-    // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
+    frame_dig -1
     concat
-    // smart_contracts/we_repo/contract.algo.ts:82
-    // const dappIds = this.project(Txn.sender).value.dappIds.copy()
+    // smart_contracts/we_repo/contract.algo.ts:127
+    // const dappIds = this.project(creatorAddress).value.dappIds.copy()
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     substring3
     frame_bury 0
 
 createProjectMicroDapp_while_top@3:
-    // smart_contracts/we_repo/contract.algo.ts:85
+    // smart_contracts/we_repo/contract.algo.ts:130
     // while (dappIds.length < type) {
     frame_dig 0
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     dup
     frame_bury 1
-    frame_dig -1
+    frame_dig -2
     <
-    // smart_contracts/we_repo/contract.algo.ts:85-87
+    // smart_contracts/we_repo/contract.algo.ts:130-132
     // while (dappIds.length < type) {
     //   dappIds.push(new arc4.UintN64(0))
     // }
     bz createProjectMicroDapp_after_while@5
-    // smart_contracts/we_repo/contract.algo.ts:86
+    // smart_contracts/we_repo/contract.algo.ts:131
     // dappIds.push(new arc4.UintN64(0))
     frame_dig 0
     extract 2 0
@@ -503,7 +763,7 @@ createProjectMicroDapp_while_top@3:
     concat
     dup
     len
-    intc_3 // 8
+    pushint 8 // 8
     /
     itob
     extract 6 2
@@ -513,48 +773,48 @@ createProjectMicroDapp_while_top@3:
     b createProjectMicroDapp_while_top@3
 
 createProjectMicroDapp_after_while@5:
-    // smart_contracts/we_repo/contract.algo.ts:90
+    // smart_contracts/we_repo/contract.algo.ts:135
     // dappIds[type - 1] = new arc4.UintN64(dappId)
-    frame_dig -2
+    frame_dig -3
     itob
-    frame_dig -1
-    intc_1 // 1
+    frame_dig -2
+    intc_0 // 1
     -
     dup
     frame_dig 1
     <
     assert // Index access is out of bounds
-    intc_3 // 8
+    pushint 8 // 8
     *
-    intc_2 // 2
+    pushint 2 // 2
     +
     frame_dig 0
     swap
     uncover 2
     replace3
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:93
+    // smart_contracts/we_repo/contract.algo.ts:138
     // this.project(Txn.sender).value.dappIds = dappIds.copy()
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:93
+    // smart_contracts/we_repo/contract.algo.ts:138
     // this.project(Txn.sender).value.dappIds = dappIds.copy()
     dup
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_0 // 0
+    intc_1 // 0
     dig 2
     extract3
     dig 2
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     dig 3
     len
@@ -573,14 +833,14 @@ createProjectMicroDapp_after_while@5:
     uncover 3
     len
     dig 2
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     +
     swap
     -
     itob
     extract 6 2
-    replace2 2
+    replace2 18
     dig 1
     box_del
     pop
@@ -590,35 +850,35 @@ createProjectMicroDapp_after_while@5:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.getProjectName() -> bytes:
 getProjectName:
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:98
+    // smart_contracts/we_repo/contract.algo.ts:143
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:98
+    // smart_contracts/we_repo/contract.algo.ts:143
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     box_len
     bury 1
     assert // Project does not exist
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:99
-    // return this.project(Txn.sender).value.project_name_des.native
+    // smart_contracts/we_repo/contract.algo.ts:144
+    // return this.project(Txn.sender).value.project_name.native
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:99
-    // return this.project(Txn.sender).value.project_name_des.native
+    // smart_contracts/we_repo/contract.algo.ts:144
+    // return this.project(Txn.sender).value.project_name.native
     box_get
     assert // Box must have value
     dup
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     dig 1
     len
@@ -629,74 +889,74 @@ getProjectName:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.getDappIdByType(type: uint64) -> uint64:
 getDappIdByType:
-    // smart_contracts/we_repo/contract.algo.ts:102-103
+    // smart_contracts/we_repo/contract.algo.ts:147-148
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     // public getDappIdByType(type: uint64): uint64 {
     proto 1 1
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:104
+    // smart_contracts/we_repo/contract.algo.ts:149
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:104
+    // smart_contracts/we_repo/contract.algo.ts:149
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     box_len
     bury 1
     assert // Project does not exist
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:105
+    // smart_contracts/we_repo/contract.algo.ts:150
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:105
+    // smart_contracts/we_repo/contract.algo.ts:150
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     substring3
-    // smart_contracts/we_repo/contract.algo.ts:108
+    // smart_contracts/we_repo/contract.algo.ts:153
     // if (type <= 0 || type > dappIds.length) {
     frame_dig -1
-    intc_0 // 0
+    intc_1 // 0
     <=
     bnz getDappIdByType_if_body@2
     frame_dig 0
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     frame_dig -1
     <
     bz getDappIdByType_after_if_else@3
 
 getDappIdByType_if_body@2:
-    // smart_contracts/we_repo/contract.algo.ts:109
+    // smart_contracts/we_repo/contract.algo.ts:154
     // return 0
-    intc_0 // 0
+    intc_1 // 0
     swap
     retsub
 
 getDappIdByType_after_if_else@3:
-    // smart_contracts/we_repo/contract.algo.ts:112
+    // smart_contracts/we_repo/contract.algo.ts:157
     // return dappIds[type - 1].native
     frame_dig -1
-    intc_1 // 1
+    intc_0 // 1
     -
     frame_dig 0
     extract 2 0
     swap
-    intc_3 // 8
+    pushint 8 // 8
     *
     extract_uint64
     swap
@@ -705,38 +965,38 @@ getDappIdByType_after_if_else@3:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.getAllDappIds() -> bytes:
 getAllDappIds:
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:117
+    // smart_contracts/we_repo/contract.algo.ts:162
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:117
+    // smart_contracts/we_repo/contract.algo.ts:162
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     box_len
     bury 1
     assert // Project does not exist
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:118
+    // smart_contracts/we_repo/contract.algo.ts:163
     // return this.project(Txn.sender).value.dappIds
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:118
+    // smart_contracts/we_repo/contract.algo.ts:163
     // return this.project(Txn.sender).value.dappIds
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     substring3
     retsub
@@ -744,61 +1004,61 @@ getAllDappIds:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.getProjectHoldersDao() -> bytes:
 getProjectHoldersDao:
-    // smart_contracts/we_repo/contract.algo.ts:122-123
+    // smart_contracts/we_repo/contract.algo.ts:167-168
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     // public getProjectHoldersDao(): arc4.UintN64 {
     proto 0 1
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:124
+    // smart_contracts/we_repo/contract.algo.ts:169
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:124
+    // smart_contracts/we_repo/contract.algo.ts:169
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     box_len
     bury 1
     assert // Project does not exist
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:125
+    // smart_contracts/we_repo/contract.algo.ts:170
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:125
+    // smart_contracts/we_repo/contract.algo.ts:170
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     substring3
     dup
-    // smart_contracts/we_repo/contract.algo.ts:126
+    // smart_contracts/we_repo/contract.algo.ts:171
     // return dappIds.length >= 1 ? dappIds[0] : new arc4.UintN64(0)
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
     bz getProjectHoldersDao_ternary_false@2
     frame_dig 0
     extract 2 8
 
 getProjectHoldersDao_ternary_merge@3:
-    // smart_contracts/we_repo/contract.algo.ts:126
+    // smart_contracts/we_repo/contract.algo.ts:171
     // return dappIds.length >= 1 ? dappIds[0] : new arc4.UintN64(0)
     swap
     retsub
 
 getProjectHoldersDao_ternary_false@2:
-    // smart_contracts/we_repo/contract.algo.ts:126
+    // smart_contracts/we_repo/contract.algo.ts:171
     // return dappIds.length >= 1 ? dappIds[0] : new arc4.UintN64(0)
     bytec_3 // 0x0000000000000000
     b getProjectHoldersDao_ternary_merge@3
@@ -806,63 +1066,63 @@ getProjectHoldersDao_ternary_false@2:
 
 // smart_contracts/we_repo/contract.algo.ts::WeRepo.getProjectRewardsDao() -> bytes:
 getProjectRewardsDao:
-    // smart_contracts/we_repo/contract.algo.ts:129-130
+    // smart_contracts/we_repo/contract.algo.ts:174-175
     // @abimethod({ allowActions: 'NoOp', readonly: true })
     // public getProjectRewardsDao(): arc4.UintN64 {
     proto 0 1
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:131
+    // smart_contracts/we_repo/contract.algo.ts:176
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:131
+    // smart_contracts/we_repo/contract.algo.ts:176
     // assert(this.project(Txn.sender).exists, 'Project does not exist')
     box_len
     bury 1
     assert // Project does not exist
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     bytec_0 // "_p"
-    // smart_contracts/we_repo/contract.algo.ts:132
+    // smart_contracts/we_repo/contract.algo.ts:177
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     txn Sender
-    // smart_contracts/we_repo/contract.algo.ts:25
+    // smart_contracts/we_repo/contract.algo.ts:27
     // project = BoxMap<ProjectId, ProjectData>({ keyPrefix: '_p' })
     concat
-    // smart_contracts/we_repo/contract.algo.ts:132
+    // smart_contracts/we_repo/contract.algo.ts:177
     // const dappIds = this.project(Txn.sender).value.dappIds.copy()
     box_get
     assert // Box must have value
     dup
-    intc_0 // 0
+    intc_3 // 16
     extract_uint16
     dig 1
-    intc_2 // 2
+    intc_2 // 18
     extract_uint16
     substring3
     dup
-    // smart_contracts/we_repo/contract.algo.ts:133
+    // smart_contracts/we_repo/contract.algo.ts:178
     // return dappIds.length >= 2 ? dappIds[1] : new arc4.UintN64(0)
-    intc_0 // 0
+    intc_1 // 0
     extract_uint16
-    intc_2 // 2
+    pushint 2 // 2
     >=
     bz getProjectRewardsDao_ternary_false@2
     frame_dig 0
     extract 10 8
 
 getProjectRewardsDao_ternary_merge@3:
-    // smart_contracts/we_repo/contract.algo.ts:133
+    // smart_contracts/we_repo/contract.algo.ts:178
     // return dappIds.length >= 2 ? dappIds[1] : new arc4.UintN64(0)
     swap
     retsub
 
 getProjectRewardsDao_ternary_false@2:
-    // smart_contracts/we_repo/contract.algo.ts:133
+    // smart_contracts/we_repo/contract.algo.ts:178
     // return dappIds.length >= 2 ? dappIds[1] : new arc4.UintN64(0)
     bytec_3 // 0x0000000000000000
     b getProjectRewardsDao_ternary_merge@3

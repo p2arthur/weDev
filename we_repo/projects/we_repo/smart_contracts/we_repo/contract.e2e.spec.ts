@@ -61,12 +61,17 @@ describe('WeRepo contract', () => {
   })
 
   test('Test if manager can create a new project', async () => {
+    await weRepoClient.send.optIn.optInToApplication({ args: [], sender: projectCreatorAccount.addr })
+
     const result = await weRepoClient.send.createNewProject({
-      args: ['Project name'],
+      args: ['Project name', 'Project username', 0n, 0n, 0n, 0n],
       sender: projectCreatorAccount.addr,
     })
 
     const totalProjects = await weRepoClient.state.global.totalProjects()
+    const projectUser = await weRepoClient.state.local(projectCreatorAccount.addr).projectUsername()
+
+    console.log('Project User:', projectUser)
 
     expect(totalProjects).toEqual(1)
   })
@@ -75,7 +80,7 @@ describe('WeRepo contract', () => {
     // Create a project first
     const projectName = 'Multi-Dapp Project'
     await weRepoClient.send.createNewProject({
-      args: [projectName],
+      args: [projectName, 'multi-dapp-project', 0n, 0n, 0n, 0n],
       sender: projectCreatorAccount.addr,
     })
 
@@ -86,17 +91,17 @@ describe('WeRepo contract', () => {
 
     // Add dapps of three different types
     await weRepoClient.send.createProjectMicroDapp({
-      args: [holdersDappId, 1n],
+      args: [holdersDappId, 1n, String(projectCreatorAccount.addr)],
       sender: projectCreatorAccount.addr,
     })
 
     await weRepoClient.send.createProjectMicroDapp({
-      args: [rewardsDappId, 2n],
+      args: [rewardsDappId, 2n, String(projectCreatorAccount.addr)],
       sender: projectCreatorAccount.addr,
     })
 
     await weRepoClient.send.createProjectMicroDapp({
-      args: [governanceDappId, 3n],
+      args: [governanceDappId, 3n, String(projectCreatorAccount.addr)],
       sender: projectCreatorAccount.addr,
     })
 
