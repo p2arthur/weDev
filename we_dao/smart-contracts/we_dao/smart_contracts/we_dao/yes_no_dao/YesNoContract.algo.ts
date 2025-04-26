@@ -4,8 +4,10 @@ import {
   assert,
   BoxMap,
   Contract,
+  Global,
   GlobalState,
   gtxn,
+  itxn,
   op,
   Txn,
   uint64,
@@ -51,6 +53,20 @@ export class YesNoDao extends Contract {
 
     // Set the asset id value
     this.asset_id.value = asset_id
+
+    // Save this microdapp into the repo
+    itxn
+      .applicationCall({
+        appArgs: [
+          arc4.methodSelector('createProjectMicroDapp(uint64,uint64)void'),
+          new arc4.UintN64(Global.callerApplicationId),
+          new arc4.UintN64(1),
+        ],
+        appId: 738153983,
+        fee: 0,
+        accounts: [Txn.sender],
+      })
+      .submit()
   }
 
   @abimethod({ allowActions: 'NoOp' })
