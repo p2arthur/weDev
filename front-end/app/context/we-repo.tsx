@@ -1,8 +1,16 @@
-import algosdk from "algosdk";
+import algosdk, { TransactionSigner } from "algosdk";
+import { I } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 import { createContext, useState, ReactNode, useContext } from "react";
-import { byteArrayToUint128 } from "~/contract-methods/holders-contract/proposals";
 import { getRepoApplicationClient } from "~/contract-methods/repository-contract/get-client";
 import decodeProjectData from "~/contract-methods/repository-contract/utils/decodeProjectData";
+
+export interface IWeRepoLocalStorage {
+  project_username: string | undefined;
+  background_color: number | string | undefined;
+  primary_color: number | string | undefined;
+  secondary_color: number | string | undefined;
+  accent_color: number | string | undefined;
+}
 
 interface WeRepoContextType {
   projectsList: IWeRepoProject[];
@@ -10,6 +18,12 @@ interface WeRepoContextType {
   loadingProjects: boolean;
   appendAllRepoProjects: () => Promise<void>;
   appendUserProjectData: (walletAddress: string) => Promise<void>;
+  createNewProject: (
+    signer: TransactionSigner,
+    senderAddress: string,
+    projectData: IWeRepoProject
+  ) => Promise<void>;
+  getUserLocalStorage: (walletAddress: string) => Promise<IWeRepoLocalStorage>;
 }
 
 export interface IWeRepoProject {
@@ -88,25 +102,27 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getUserLocalStorage = async (walletAddress: string) => {
+  const getUserLocalStorage = async (
+    walletAddress: string
+  ): Promise<IWeRepoLocalStorage> => {
     const appClient = await getRepoApplicationClient();
 
     return {
       project_username: await appClient.state
         .local(walletAddress)
         .projectUsername(),
-      background_color: await appClient.state
-        .local(walletAddress)
-        .projectBackgroundColor(),
-      primary_color: await appClient.state
-        .local(walletAddress)
-        .projectPrimaryColor(),
-      secondary_color: await appClient.state
-        .local(walletAddress)
-        .projectSecondaryColor(),
-      accent_color: await appClient.state
-        .local(walletAddress)
-        .projectAccentColor(),
+      background_color: Number(
+        await appClient.state.local(walletAddress).projectBackgroundColor()
+      ),
+      primary_color: Number(
+        await appClient.state.local(walletAddress).projectPrimaryColor()
+      ),
+      secondary_color: Number(
+        await appClient.state.local(walletAddress).projectSecondaryColor()
+      ),
+      accent_color: Number(
+        await appClient.state.local(walletAddress).projectAccentColor()
+      ),
     };
   };
 
@@ -145,6 +161,39 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
       console.error(error);
     }
   };
+
+  const createNewProject = async (
+    signer: TransactionSigner,
+    senderAddress: string,
+    projectData: IWeRepoProject
+  ) => {
+    const appClient = await getRepoApplicationClient();
+    try {
+      const optedIn = await appClient.state
+        .local(senderAddress)
+        ?.projectUsername();
+    } catch (error) {
+      await appClient.send.optIn.optInToApplication({
+        args: [],
+        sender: senderAddress,
+        signer: signer,
+      });
+    }
+
+    await appClient.send.createNewProject({
+      args: [
+        projectData.project_name,
+        projectData.project_username || "",
+        projectData.primary_color,
+        projectData.background_color,
+        projectData.secondary_color,
+        projectData.accent_color,
+      ],
+      sender: senderAddress,
+      signer: signer,
+    });
+  };
+
   const appendAllRepoProjects = async () => {
     await getAllRepoProjects();
   };
@@ -157,6 +206,8 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
         appendAllRepoProjects,
         appendUserProjectData,
         loadingProjects,
+        createNewProject,
+        getUserLocalStorage,
       }}
     >
       {children}

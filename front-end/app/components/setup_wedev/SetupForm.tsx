@@ -12,9 +12,10 @@ import {
   Web3Tool,
 } from "~/Web3Tools/Web3ToolTypes";
 import { useLaunchpad } from "~/context/launchpad";
+import { IWeRepoProject } from "~/context/we-repo";
 
 interface SetupFormProps {
-  onSubmit: (projectName: string, web3Tools: Web3Tool[]) => Promise<void>;
+  onSubmit: (project: IWeRepoProject, web3Tools: Web3Tool[]) => Promise<void>;
   isLoading?: boolean;
 }
 
@@ -59,18 +60,32 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!activeAccount) return;
+
     try {
+      const project: IWeRepoProject = {
+        project_name: title,
+        project_username: title,
+        creator_address: activeAccount.address,
+        background_color: parseInt(backgroundColor.replace("#", ""), 16),
+        primary_color: parseInt(primaryColor.replace("#", ""), 16),
+        secondary_color: parseInt(secondaryColor.replace("#", ""), 16),
+        accent_color: parseInt(accentColor.replace("#", ""), 16),
+        project_dapp_ids: [],
+        project_reputation: 0,
+        project_contribution: 0,
+      };
+
       console.log("creating new project nessa poha");
       if (!activeAccount || !formData) return;
       const appId = await launchNewProject(
+        project,
         formData.anyone_can_create!,
         formData.min_holding!,
-        formData.assetId!,
-        activeAccount.address,
-        transactionSigner
+        formData.assetId!
       );
 
-      setNewAppId(appId);
+      // setNewAppId(appId);
       showToast("Proposal created successfully!", "success");
       // navigate("/");
     } catch (error) {
@@ -159,9 +174,81 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               maxLength={100}
             />
           </div>
+          {newAppId && (
+            <div className="flex flex-col gap-4 justify-start items-center mt-8">
+              <h3 className="text-text/70 font-bold">{`Project: ${title} with ${selectedTools.map(
+                (selectedTool) => <p>{selectedTool.name}</p>
+              )}`}</h3>
+              <h3 className="text-text/70 flex gap-1 text-sm">
+                <p>
+                  Successfully created project with ID copy this variable to
+                  your .env:{" "}
+                </p>
+                <span className="text-white font-semibold">
+                  VITE_DAO_CONTRACT_APP_ID:{newAppId}
+                </span>
+              </h3>
+            </div>
+          )}
+          {/* Color Pickers */}
           <div>
             <label className="block text-text font-medium mb-2">
-              2 - Select Web3 Tool options for your dApp
+              2 - Choose your project's colors
+            </label>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-text font-medium">
+                  Background Color
+                </label>
+                <input
+                  type="color"
+                  value={backgroundColor}
+                  onChange={(e) => setBackgroundColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg border border-text/10 focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: backgroundColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Primary Color
+                </label>
+                <input
+                  type="color"
+                  value={primaryColor}
+                  onChange={(e) => setPrimaryColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: primaryColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Secondary Color
+                </label>
+                <input
+                  type="color"
+                  value={secondaryColor}
+                  onChange={(e) => setSecondaryColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: secondaryColor }} // Dynamic color for the picker
+                />
+              </div>
+              <div>
+                <label className="block text-text font-medium">
+                  Accent Color
+                </label>
+                <input
+                  type="color"
+                  value={accentColor}
+                  onChange={(e) => setAccentColor(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
+                  style={{ backgroundColor: accentColor }} // Dynamic color for the picker
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <label className="block text-text font-medium mb-2">
+              3 - Select Web3 Tool options for your dApp
             </label>
 
             <div className="flex gap-4 text-white flex-wrap">
@@ -191,13 +278,13 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
             </div>
 
             <p className="mt-1 text-sm text-text/70">
-              Select one or more Web3 tools to include in your dApp.
+              Select one or more Web3 tools to include in your project.
             </p>
           </div>
           {selectedTools.length > 0 && (
             <div className="mt-6">
               <h4 className="text-text font-semibold mb-2">
-                3 - Setup the contract parameters
+                4 - Setup the contract parameters
               </h4>
               <div className="grid gap-4">
                 {selectedTools.map((tool) => (
@@ -275,78 +362,6 @@ export function SetupForm({ onSubmit, isLoading = false }: SetupFormProps) {
               </div>
             </div>
           )}
-          {newAppId && (
-            <div className="flex flex-col gap-4 justify-start items-center mt-8">
-              <h3 className="text-text/70 font-bold">{`Project: ${title} with ${selectedTools.map(
-                (selectedTool) => <p>{selectedTool.name}</p>
-              )}`}</h3>
-              <h3 className="text-text/70 flex gap-1 text-sm">
-                <p>
-                  Successfully created project with ID copy this variable to
-                  your .env:{" "}
-                </p>
-                <span className="text-white font-semibold">
-                  VITE_DAO_CONTRACT_APP_ID:{newAppId}
-                </span>
-              </h3>
-            </div>
-          )}
-          {/* Color Pickers */}
-          <div>
-            <label className="block text-text font-medium mb-2">
-              3 - Choose your project's colors
-            </label>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="block text-text font-medium">
-                  Background Color
-                </label>
-                <input
-                  type="color"
-                  value={backgroundColor}
-                  onChange={(e) => setBackgroundColor(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg border border-text/10 focus:outline-none focus:border-primary transition-colors"
-                  style={{ backgroundColor: backgroundColor }} // Dynamic color for the picker
-                />
-              </div>
-              <div>
-                <label className="block text-text font-medium">
-                  Primary Color
-                </label>
-                <input
-                  type="color"
-                  value={primaryColor}
-                  onChange={(e) => setPrimaryColor(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  style={{ backgroundColor: primaryColor }} // Dynamic color for the picker
-                />
-              </div>
-              <div>
-                <label className="block text-text font-medium">
-                  Secondary Color
-                </label>
-                <input
-                  type="color"
-                  value={secondaryColor}
-                  onChange={(e) => setSecondaryColor(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  style={{ backgroundColor: secondaryColor }} // Dynamic color for the picker
-                />
-              </div>
-              <div>
-                <label className="block text-text font-medium">
-                  Accent Color
-                </label>
-                <input
-                  type="color"
-                  value={accentColor}
-                  onChange={(e) => setAccentColor(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg focus:outline-none focus:border-primary transition-colors"
-                  style={{ backgroundColor: accentColor }} // Dynamic color for the picker
-                />
-              </div>
-            </div>
-          </div>
           {!newAppId && (
             <div className="flex items-center justify-center mt-8">
               <MdQuestionAnswer className="w-8 h-8 text-text/50" />

@@ -9,11 +9,15 @@ import * as algokit from "@algorandfoundation/algokit-utils";
 import { Footer } from "../components/footer";
 import { ProposalFormRewards } from "../components/proposalFormRewards";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate, useParams } from "@remix-run/react";
 
 export default function CreateProposal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { activeAccount, transactionSigner } = useWallet();
   const [activeTab, setActiveTab] = useState("proposal");
+
+  const { dappId } = useParams();
+  const navigate = useNavigate();
 
   const handleCreateProposal = async (
     title: string,
@@ -24,6 +28,7 @@ export default function CreateProposal() {
     votePrice?: number
   ) => {
     setIsSubmitting(true);
+
     try {
       // TODO: Implement the actual proposal creation logic here
       console.log("Creating proposal:", {
@@ -42,6 +47,7 @@ export default function CreateProposal() {
           proposerAddress: activeAccount?.address || "",
           expiresIn: expireTime,
           transactionSigner: transactionSigner,
+          dappId: Number(dappId),
         });
       } else {
         console.log("Original expiryTimestamp", expiryTimestamp);
@@ -57,6 +63,8 @@ export default function CreateProposal() {
           amount: amount || 0,
           votePrice: votePrice || 0,
         });
+
+        navigate(`/we-dao/${dappId}/proposals`);
       }
     } catch (error) {
       console.error("Failed to create proposal:", error);
@@ -109,6 +117,7 @@ export default function CreateProposal() {
               <ProposalForm
                 onSubmit={handleCreateProposal}
                 isLoading={isSubmitting}
+                dappId={Number(useParams().dappId)}
               />
             )}
             {activeTab === "rewards" && (

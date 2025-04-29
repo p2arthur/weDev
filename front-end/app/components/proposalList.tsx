@@ -1,23 +1,29 @@
+import { IWeRepoLocalStorage } from "~/context/we-repo";
 import { Proposal } from "../interfaces/proposals";
 import { ProposalCard } from "./proposalCard";
 
 interface ProposalListProps {
   proposals: Proposal[];
   loadingProposals: boolean;
+  localStorage: IWeRepoLocalStorage;
 }
 
 export function ProposalList({
   proposals,
   loadingProposals,
+  localStorage,
 }: ProposalListProps) {
-  console.log('proposals', proposals);
+  console.log("proposals", proposals);
   return (
     <div>
       {proposals.length > 0 ? (
         <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           {proposals.map((proposal) => (
-
-            <ProposalCard proposal={proposal} key={proposal.id + proposal.type} />
+            <ProposalCard
+              proposal={proposal}
+              key={proposal.id + proposal.type}
+              localStorage={localStorage}
+            />
           ))}
         </div>
       ) : null}

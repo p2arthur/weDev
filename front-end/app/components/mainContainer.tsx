@@ -5,10 +5,17 @@ import { TabOptionInterface, Tabs } from "./tabs";
 import { getProposals } from "../contract-methods/holders-contract/proposals";
 import { getProposals as getRewardProposals } from "../contract-methods/reward-contract/proposals";
 import AnimButton from "./animButton";
-import { useNavigate } from "@remix-run/react";
+import { useNavigate, useParams } from "@remix-run/react";
 import { useWallet } from "@txnlab/use-wallet-react";
 import { VoteContext } from "../context/vote";
-export function MainContainer() {
+import { IWeRepoLocalStorage } from "~/context/we-repo";
+
+interface MainContainerProps {
+  dappId: number;
+  localStorage: IWeRepoLocalStorage;
+}
+
+export function MainContainer({ dappId, localStorage }: MainContainerProps) {
   const tabOptions: TabOptionInterface[] = [
     {
       label: "All",
@@ -30,11 +37,12 @@ export function MainContainer() {
   const [proposalList, setProposalList] = useState<Proposal[]>([]);
 
   const [loadingProposals, setLoadingProposals] = useState(true);
+
   const { displayVoteModal } = useContext(VoteContext);
   const { activeAccount } = useWallet();
 
   async function loadProposals(): Promise<Proposal[]> {
-    const proposals = await getProposals();
+    const proposals = await getProposals(Number(dappId));
     const rewardProposals = await getRewardProposals();
     return [...proposals, ...rewardProposals];
   }
@@ -68,8 +76,9 @@ export function MainContainer() {
         <Tabs options={tabOptions} onClickHandler={onSwitchTab} />
         {activeAccount ? (
           <AnimButton
+            color={String(localStorage?.primary_color || "#3db2ff")}
             onClick={() => {
-              navigate("/create");
+              navigate(`/we-dao/create/${dappId}`);
             }}
           >
             Create
@@ -80,6 +89,7 @@ export function MainContainer() {
         <ProposalList
           proposals={proposalList.sort((a, b) => b.expiresIn - a.expiresIn)}
           loadingProposals={loadingProposals}
+          localStorage={localStorage}
         />
       </div>
     </div>

@@ -14,12 +14,14 @@ import {
   getUserVotes as getUserVotesReward,
 } from "../contract-methods/reward-contract/user";
 import { useToast } from "./toast";
+import { IWeRepoLocalStorage } from "~/context/we-repo";
 
 interface ProposalCardProps {
   proposal: Proposal;
+  localStorage?: IWeRepoLocalStorage;
 }
 
-export const ProposalCard = ({ proposal }: ProposalCardProps) => {
+export const ProposalCard = ({ proposal, localStorage }: ProposalCardProps) => {
   const { setSelectedProposal, setDisplayVoteModal, displayVoteModal } =
     useContext(VoteContext);
   const [proposalAsset, setProposalAsset] = useState<any>();
@@ -139,7 +141,15 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   }
 
   return (
-    <div className="bg-surface rounded-2xl p-5 shadow-md text-text max-w-xl w-full">
+    <div
+      className={`bg-[var(--background-color)] rounded-2xl p-5 shadow-md text-text max-w-xl w-full`}
+      style={
+        {
+          "--background-color": localStorage?.background_color,
+          "--primary-color": localStorage?.primary_color,
+        } as React.CSSProperties
+      }
+    >
       {loadingProposal ? (
         <div className="flex justify-center items-center h-full">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -148,7 +158,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         <>
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h3 className="text-heading text-xl font-bold text-white font-display">
+              <h3 className="text-[var(--primary-color)] text-xl font-bold">
                 {proposal.title}
               </h3>
               <p className="text-sm text-text/80 font-sans">

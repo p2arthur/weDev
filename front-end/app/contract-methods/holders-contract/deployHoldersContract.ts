@@ -2,15 +2,14 @@ import * as algokit from "@algorandfoundation/algokit-utils";
 import { YesNoDaoFactory } from "./YesNoDaoClient";
 import { TransactionSigner } from "algosdk";
 import { Config, microAlgo } from "@algorandfoundation/algokit-utils";
+import { getRepoApplicationClient } from "../repository-contract/get-client";
 
 export default async function deployHoldersContract(
   anyoneCanCreate: boolean,
   minHolding: number,
   assetId: number,
   senderAddress: string,
-  signer: TransactionSigner,
-  projectTitle: string,
-  projectDescription: string
+  signer: TransactionSigner
 ) {
   Config.configure({ populateAppCallResources: true, debug: true });
 
@@ -23,15 +22,6 @@ export default async function deployHoldersContract(
   const factory = algorand.client.getTypedAppFactory(YesNoDaoFactory, {
     defaultSender: senderAddress,
   });
-
-  console.log(
-    "Deploying holders contract...",
-    anyoneCanCreate,
-    1,
-    1,
-    projectTitle,
-    projectDescription
-  );
 
   const { appClient } = await factory.send.create.createApplication({
     args: {
@@ -54,6 +44,14 @@ export default async function deployHoldersContract(
   });
 
   console.log(`Deployed app with id: ${appId}`);
+
+  const repoAppClient = await getRepoApplicationClient();
+
+  await repoAppClient.send.createProjectMicroDapp({
+    args: [appId, 1, senderAddress],
+    sender: senderAddress,
+    signer: signer,
+  });
 
   return { appClient, appId };
 }

@@ -12,17 +12,17 @@ import { WeRepoProvider } from "./context/we-repo";
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <Providers>
-      <WeRepoProvider>
-        <LaunchpadProvider>
-          <WalletContextProvider>
+      <WalletContextProvider>
+        <WeRepoProvider>
+          <LaunchpadProvider>
             <VoteProvider>
               <ToastProvider>
                 <AsaMetadataProvider>{children}</AsaMetadataProvider>
               </ToastProvider>
             </VoteProvider>
-          </WalletContextProvider>
-        </LaunchpadProvider>
-      </WeRepoProvider>
+          </LaunchpadProvider>
+        </WeRepoProvider>
+      </WalletContextProvider>
     </Providers>
   );
 }

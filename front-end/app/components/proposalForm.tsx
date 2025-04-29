@@ -9,9 +9,11 @@ import { FaLock } from "react-icons/fa";
 import algosdk from "algosdk";
 
 interface ProposalFormProps {
+  dappId: number;
   onSubmit: (
     title: string,
     description: string,
+
     expiryTimestamp: number
   ) => Promise<void>;
   isLoading?: boolean;
@@ -20,6 +22,7 @@ interface ProposalFormProps {
 export function ProposalForm({
   onSubmit,
   isLoading = false,
+  dappId,
 }: ProposalFormProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -31,13 +34,18 @@ export function ProposalForm({
 
   useEffect(() => {
     async function getGlobals() {
-      const globals = await getGlobalState();
+      const globals = await getGlobalState(dappId);
+      const manager = globals.managerAddress?.asByteArray();
+      const managerAddress = algosdk.encodeAddress(manager!);
+      console.log("Manager address:", managerAddress);
+
+      console.log("Manager address:", managerAddress, activeAccount);
+
+      console.log("globals", globals);
+
       if (globals.anyoneCanCreate) {
         setCanCreate(true);
       } else {
-        const manager = globals.managerAddress?.asByteArray();
-        const managerAddress = algosdk.encodeAddress(manager!);
-        console.log("Manager address:", managerAddress, activeAccount);
         if (managerAddress === activeAccount?.address) {
           setCanCreate(true);
         }
@@ -84,7 +92,7 @@ export function ProposalForm({
         <div className="flex flex-col items-center justify-center gap-4 py-8">
           <FaLock className="w-16 h-16 text-text/50" />
           <h2 className="text-2xl font-bold text-heading text-center">
-            Only the DAO manager can create proposals
+            Only the DAO manager can create proposals {}
           </h2>
           <p className="text-text/70 text-center">
             This DAO is configured to only allow the manager to create

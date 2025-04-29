@@ -7,6 +7,7 @@ interface AnimButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   disabled?: boolean;
+  color?: string;
 }
 
 const baseColor = "#" + getEnvColor("primary", "#00f5c0");
@@ -16,6 +17,7 @@ const AnimButton: React.FC<AnimButtonProps> = ({
   onClick,
   children,
   disabled,
+  color,
 }) => {
   return (
     <ClientOnly>
@@ -29,7 +31,7 @@ const AnimButton: React.FC<AnimButtonProps> = ({
           backgroundColor: baseColor,
         }}
         animate={{
-          backgroundColor: baseColor,
+          backgroundColor: color,
         }}
         whileTap={{ scale: 0.95 }}
         onClick={onClick}

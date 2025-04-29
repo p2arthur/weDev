@@ -1,4 +1,4 @@
-import { useParams } from "@remix-run/react";
+import { useNavigate, useParams } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { Footer } from "~/components/footer";
@@ -9,6 +9,8 @@ import roundWalletAddress from "~/utils/roundWalletAddress";
 export default function WalletPage() {
   const { walletAddress } = useParams();
   const { appendUserProjectData, userProject } = useWeRepo();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (walletAddress) {
@@ -36,15 +38,15 @@ export default function WalletPage() {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, "--background": backgroundColor } as any}
-      animate={{ opacity: 1, y: 0, "--background": backgroundColor }}
+      initial={{ opacity: 0, y: 20, "--background": primaryColor } as any}
+      animate={{ opacity: 1, y: 0, "--background": primaryColor }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen pb-10 bg-[var(--background)] text-white flex flex-col"
       style={
         {
-          "--background": backgroundColor,
-          "--primary": primaryColor,
+          "--background": primaryColor,
+          "--primary": backgroundColor,
           "--secondary": secondaryColor,
           "--accent": accentColor,
         } as React.CSSProperties
@@ -88,6 +90,9 @@ export default function WalletPage() {
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.1 }}
                   className="p-6 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer bg-[var(--primary)] text-black hover:bg-[var(--primary)] transition"
+                  onClick={() => {
+                    navigate(`/we-dao/${dappId}`);
+                  }}
                 >
                   <h3 className="text-lg font-bold">Microdapp ID</h3>
                   <p className="text-sm mt-2">{dappId}</p>

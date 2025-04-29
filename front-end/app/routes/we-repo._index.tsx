@@ -1,109 +1,138 @@
-import { useNavigate, useParams } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
 import { useWeRepo } from "~/context/we-repo";
-import algosdk from "algosdk";
+import { useWallet } from "@txnlab/use-wallet-react";
+import deployHoldersContract from "~/contract-methods/holders-contract/deployHoldersContract";
 import roundWalletAddress from "~/utils/roundWalletAddress";
 
 export default function AllReposPage() {
   const { appendAllRepoProjects, projectsList, loadingProjects } = useWeRepo();
   const navigate = useNavigate();
+  const { activeAccount, transactionSigner } = useWallet();
 
   useEffect(() => {
     appendAllRepoProjects();
   }, []);
 
+  const handleDeployHoldersContract = async () => {
+    if (!activeAccount) return;
+    await deployHoldersContract(
+      true,
+      1,
+      0,
+      activeAccount.address,
+      transactionSigner
+    );
+  };
+
   const color = (c: number) => `#${c.toString(16).padStart(6, "0")}`;
 
   return (
-    <div className="min-h-screen bg-background pb-10">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      <main className="container mx-auto px-4 py-8 mt-24 md:mt-32">
+      <main className="flex-grow container mx-auto px-6 py-20 mt-24 md:mt-32">
         <AnimatePresence mode="wait">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center"
           >
-            <div className="flex flex-col items-center gap-4">
-              <motion.div className="w-full max-w-5xl text-white">
-                <h2 className="text-3xl font-bold">Projects linked to</h2>
-                <p className="text-sm text-text/70 mt-2">
-                  These are the repositories in the We repo and its microdapp
-                  ids
-                </p>
-              </motion.div>
+            <div className="w-full text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-extrabold text-heading">
+                Explore Community Projects
+              </h2>
+              <p className="text-base text-primary mt-4 max-w-2xl mx-auto">
+                These are decentralized repositories and microdApps created
+                through WeDev. Discover, customize, and deploy your own versions
+                easily!
+              </p>
+            </div>
 
-              <motion.div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                {projectsList.map((project, index) => (
-                  <motion.div
-                    initial={
-                      {
-                        opacity: 0,
-                        y: 20,
-                        "--background": color(project.background_color),
-                      } as any
-                    }
-                    animate={{
-                      opacity: 1,
-                      y: 0,
+            {/* Projects List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 w-full">
+              {projectsList.map((project, index) => (
+                <motion.div
+                  key={index}
+                  initial={
+                    {
+                      opacity: 0,
+                      y: 20,
                       "--background": color(project.background_color),
-                    }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.5 }}
-                    className="pb-10 transition-all bg-surface border-2 border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white flex flex-col p-2 rounded-md cursor-pointer"
-                    onClick={() => navigate(`${project.creator_address}`)}
-                    style={
-                      {
-                        "--background": color(project.background_color),
-                        "--primary": color(project.primary_color),
-                        "--secondary": color(project.secondary_color),
-                        "--accent": color(project.accent_color),
-                      } as React.CSSProperties
-                    }
-                  >
-                    <div className="flex flex-col gap-1">
-                      <div className="flex w-full justify-end gap-2">
-                        <span className="rounded-full text-xs">
-                          {project.project_dapp_ids.length} microdapps
-                        </span>
-                        <span className="rounded-full text-xs">
-                          {project.project_dapp_ids.length} microdapps
-                        </span>
-                        <span className="rounded-full text-xs">
-                          {project.project_reputation}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-bold mb-2">
-                        {project.project_name}
-                      </h3>
-                    </div>
-                    <div className="h-full">
-                      <ul className="space-y-1 text-sm text-text/70">
-                        {project.project_dapp_ids.map((dappId, i) => (
-                          <li key={i}>App ID: {dappId}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <h2>Created by:</h2>
-                      <h3 className="text-text/70 text-xs">
-                        {roundWalletAddress(project.creator_address)}
-                      </h3>
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
+                      "--primary": color(project.primary_color),
+                      "--secondary": color(project.secondary_color),
+                      "--accent": color(project.accent_color),
+                    } as any
+                  }
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    "--background": color(project.background_color),
+                    "--primary": color(project.primary_color),
+                    "--secondary": color(project.secondary_color),
+                    "--accent": color(project.accent_color),
+                  }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col bg-white/10 hover:scale-105 backdrop-blur-lg rounded-3xl p-8 shadow-xl text-center border-2 border-transparent transition-all hover:border-[var(--primary)] hover:text-white cursor-pointer"
+                  onClick={() => navigate(`${project.creator_address}`)}
+                  style={
+                    {
+                      "--background": color(project.background_color),
+                      "--primary": color(project.primary_color),
+                      "--secondary": color(project.secondary_color),
+                      "--accent": color(project.accent_color),
+                    } as React.CSSProperties
+                  }
+                >
+                  {/* Project Header */}
+                  <div className="flex flex-col gap-2 mb-6">
+                    <h3 className="text-2xl font-semibold text-white">
+                      {project.project_name}
+                    </h3>
+                    <p className="text-sm text-text/70">
+                      {project.project_dapp_ids.length} MicrodApps
+                    </p>
+                  </div>
+
+                  {/* MicrodApp IDs */}
+                  <div className="flex flex-col items-center gap-1 mb-6">
+                    <h4 className="text-lg text-white font-bold mb-2">
+                      App IDs
+                    </h4>
+                    <ul className="space-y-1 text-sm">
+                      {project.project_dapp_ids.map((dappId, i) => (
+                        <li key={i} className="text-text/70">
+                          App ID: {dappId}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Project Creator */}
+                  <div className="flex flex-col gap-1">
+                    <p className="text-xs uppercase font-bold text-text/70 tracking-wider">
+                      Created by
+                    </p>
+                    <p className="text-sm text-text/70 break-all">
+                      {roundWalletAddress(project.creator_address)}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
+
+            {/* Loading Spinner */}
+            {loadingProjects && (
+              <div className="flex justify-center items-center mt-10">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              </div>
+            )}
           </motion.div>
-          {loadingProjects && (
-            <div className="flex justify-center items-center h-full">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yes"></div>
-            </div>
-          )}
         </AnimatePresence>
       </main>
       <Footer />

@@ -2,6 +2,7 @@ import { IWeRepoProject } from "~/context/we-repo";
 import { WeRepoClient } from "../WeRepoClient";
 import { BoxName } from "@algorandfoundation/algokit-utils/types/app";
 import algosdk from "algosdk";
+import { byteArrayToUint128 } from "./byteArrayToUint128";
 
 export default async function decodeProjectData(
   boxValue: Uint8Array<ArrayBufferLike>,
@@ -25,27 +26,15 @@ export default async function decodeProjectData(
     let currentIndex = 4;
 
     // Extract project_reputation (uint64) - 8 bytes
-    let projectReputation = 0;
-    if (currentIndex + 8 <= boxValue.length) {
-      const dataView = new DataView(
-        boxValue.buffer,
-        boxValue.byteOffset + currentIndex,
-        8
-      );
-      projectReputation = Number(dataView.getBigUint64(0, false)); // false for big-endian
-    }
+    let projectReputation = byteArrayToUint128(
+      boxValue.slice(currentIndex, currentIndex + 8)
+    );
     currentIndex += 8;
 
     // Extract project_contribution (uint64) - 8 bytes
-    let projectContribution = 0;
-    if (currentIndex + 8 <= boxValue.length) {
-      const dataView = new DataView(
-        boxValue.buffer,
-        boxValue.byteOffset + currentIndex,
-        8
-      );
-      projectContribution = Number(dataView.getBigUint64(0, false)); // false for big-endian
-    }
+    let projectContribution = byteArrayToUint128(
+      boxValue.slice(currentIndex, currentIndex + 8)
+    );
     currentIndex += 8;
 
     // Next 2 bytes indicate array length
@@ -91,8 +80,8 @@ export default async function decodeProjectData(
           primary_color: 0,
           secondary_color: 0,
           accent_color: 0,
-          project_reputation: projectReputation,
-          project_contribution: projectContribution,
+          project_reputation: Number(projectReputation),
+          project_contribution: Number(projectContribution),
         };
 
         console.log("Project name/desc:", projectNameDesc);

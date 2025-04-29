@@ -115,8 +115,8 @@ export class WeRepo extends Contract {
       this.project(Txn.sender).value = new ProjectData({
         project_name: new arc4.Str(''),
         dappIds: new arc4.DynamicArray<arc4.UintN64>(),
-        project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 5),
-        project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 5),
+        project_reputation: new arc4.UintN64(this.project(Txn.sender).value.project_reputation.native + 1),
+        project_contribution: new arc4.UintN64(this.project(Txn.sender).value.project_contribution.native + 1),
       })
 
       // Increment the total number of projects
@@ -136,6 +136,12 @@ export class WeRepo extends Contract {
 
     // Save the updated array back to the box
     this.project(Txn.sender).value.dappIds = dappIds.copy()
+    this.project(Txn.sender).value.project_reputation = new arc4.UintN64(
+      this.project(Txn.sender).value.project_reputation.native + 1,
+    )
+    this.project(Txn.sender).value.project_contribution = new arc4.UintN64(
+      this.project(Txn.sender).value.project_contribution.native + 5,
+    )
   }
 
   @abimethod({ allowActions: 'NoOp', readonly: true })

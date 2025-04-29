@@ -2,6 +2,9 @@ import { TransactionSigner } from "algosdk";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import deployHoldersContract from "~/contract-methods/holders-contract/deployHoldersContract";
 import { Web3Tool } from "~/Web3Tools/Web3ToolTypes";
+import { IWeRepoProject, useWeRepo } from "./we-repo";
+import { useWallet } from "@txnlab/use-wallet-react";
+import { getRepoApplicationClient } from "~/contract-methods/repository-contract/get-client";
 
 interface ProjectToLaunchMetadata {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -11,12 +14,11 @@ interface ProjectToLaunchMetadata {
 
 interface LaunchpadContextType {
   launchNewProject: (
+    project: IWeRepoProject,
     anyoneCanCreate: boolean,
     minHolding: number,
-    assetId: number,
-    walletAddress: string,
-    signer: TransactionSigner
-  ) => Promise<number>;
+    assetId: number
+  ) => Promise<void>;
 }
 
 const LaunchpadContext = createContext<LaunchpadContextType | undefined>(
@@ -30,27 +32,44 @@ export const LaunchpadProvider: React.FC<{ children: React.ReactNode }> = ({
     ProjectToLaunchMetadata[]
   >([]);
 
+  const { createNewProject } = useWeRepo();
+
+  const { activeAccount, transactionSigner } = useWallet();
+
   const launchNewProject = async (
+    project: IWeRepoProject,
     anyoneCanCreate: boolean,
     minHolding: number,
-    assetId: number,
-    walletAddress: string,
-    signer: TransactionSigner
-  ): Promise<number> => {
+    assetId: number
+  ): Promise<void> => {
     try {
-      console.log("launchNewProject", anyoneCanCreate);
+      if (!activeAccount) return;
+
+      console.log("launchNewProject", project);
+
+      const result = await createNewProject(
+        transactionSigner,
+        activeAccount.address,
+        project
+      );
+
       const appClient = await deployHoldersContract(
-        true,
+        false,
         0,
         0,
-        walletAddress,
-        signer,
-        "Project title",
-        "Project description"
+        activeAccount.address,
+        transactionSigner
       );
       console.log("appClient", appClient);
 
-      return Number();
+      const appId = appClient.appId;
+      const repoAppClient = await getRepoApplicationClient();
+
+      await repoAppClient.send.createProjectMicroDapp({
+        args: [appId, 1, activeAccount.address],
+        sender: activeAccount.address,
+        signer: transactionSigner,
+      });
     } catch (error) {
       console.error("error creaing new project", error);
       throw new Error("Error launching new project: " + error);

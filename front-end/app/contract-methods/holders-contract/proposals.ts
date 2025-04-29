@@ -13,9 +13,10 @@ export async function createProposal({
   proposerAddress,
   expiresIn,
   transactionSigner,
+  dappId,
 }: CreateProposalParams) {
   try {
-    const appClient = await getApplicationClient();
+    const appClient = await getApplicationClient(dappId);
     const createProposalMbrValue = 168900;
     const algorand = algokit.AlgorandClient.testNet();
 
@@ -43,9 +44,10 @@ export async function createProposal({
   }
 }
 
-export async function getProposals() {
+export async function getProposals(dappId: number) {
   try {
-    const appClient = await getApplicationClient();
+    console.log("get proposals", dappId);
+    const appClient = await getApplicationClient(dappId);
 
     const proposals: Proposal[] = [];
     let boxCount = await appClient.appClient.getBoxNames();
@@ -56,7 +58,7 @@ export async function getProposals() {
     let index = 1;
     for (const name of boxCount) {
       const boxValues = await appClient.appClient.getBoxValue(name.name);
-      const proposal = await decodeBoxValues(boxValues, index);
+      const proposal = await decodeBoxValues(boxValues, index, dappId);
       proposals.push(proposal);
       index++;
     }
@@ -80,12 +82,16 @@ export function byteArrayToUint128(byteArray: Uint8Array): bigint {
   return result;
 }
 
-async function decodeBoxValues(boxValues: Uint8Array, proposalId: number) {
+async function decodeBoxValues(
+  boxValues: Uint8Array,
+  proposalId: number,
+  dappId: number
+) {
   const BYTE_LENGTH = 8;
 
-  const { assetId, minimumHolding } = await getGlobalState();
+  const { assetId, minimumHolding } = await getGlobalState(dappId);
 
-  const appClient = await getApplicationClient();
+  const appClient = await getApplicationClient(dappId);
 
   let index = 0;
   const proposal_expiry_timestamp = byteArrayToUint128(

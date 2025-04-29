@@ -11,6 +11,7 @@ import { ProposalFormRewards } from "../components/proposalFormRewards";
 import { motion, AnimatePresence } from "framer-motion";
 import { SetupForm } from "~/components/setup_wedev/SetupForm";
 import { Web3Tool } from "~/Web3Tools/Web3ToolTypes";
+import { IWeRepoProject, useWeRepo } from "~/context/we-repo";
 
 export default function SetupWeDev() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,22 +19,12 @@ export default function SetupWeDev() {
   const [activeTab, setActiveTab] = useState("proposal");
 
   const handleCreateProject = async (
-    projectName: string,
+    project: IWeRepoProject,
     web3Tools: Web3Tool[]
   ) => {
     setIsSubmitting(true);
     try {
       if (!activeAccount) return;
-
-      const metadata = {
-        projectName,
-        web3Tools,
-      };
-
-      console.log("Creating project with metadata:", metadata);
-
-      const algorand = algokit.AlgorandClient.testNet();
-      algorand.setDefaultSigner(transactionSigner);
     } catch (error) {
       console.error("Failed to create proposal:", error);
       throw error;
