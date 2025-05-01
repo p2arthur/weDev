@@ -27,6 +27,8 @@ Every project gets its own theme based on your selected colors. Pages like:
 
 http://localhost:5173/we-repo/<wallet_address> http://localhost:5173/we-dao/<app_id>
 
+![alt text](launchpad_screenshot.png)
+
 yaml
 Copy
 Edit
