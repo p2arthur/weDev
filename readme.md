@@ -16,30 +16,53 @@ Led by **Arthur Rabelo** (Web3 Engineer) and **Kieran Nelson** (Senior Web3 Engi
   - 🎯 **Rewards DAO** – Incentives for community engagement
   - 🔒 **Staking Pools** _(coming soon)_ – Lock tokens, earn rewards
 - Customize your project interface with your own color palette (background, primary, secondary, accent)
-- See your project live in the `weRepo`, where all deployed microdApps and project metadata are browsable and styled
 - Interact through integrated wallets: **Pera**, **Defly**, and **Lute**
 
 ---
 
-## 🌈 Fully Customizable UI & Theming
+## 🧷 Launchpad – Deploy with Style
 
-Every project gets its own theme based on your selected colors. Pages like:
+The Launchpad is the entry point for every project. Users can:
 
-http://localhost:5173/we-repo/<wallet_address> http://localhost:5173/we-dao/<app_id>
+- Name their project
+- Choose custom UI colors (background, primary, secondary, accent)
+- Select one or more microdApps to include
+- Deploy everything to Algorand in one click
 
-![alt text](launchpad_screenshot.png)
+All configurations are stored on-chain via a registry contract. No backend. No centralized storage.
 
-yaml
-Copy
-Edit
-
-automatically adapt to your project’s branding. No manual config, no CSS editing — it just works.
+📸 **Interface Preview**  
+_Add your screenshot or GIF here_  
+`![Launchpad Screenshot](launchpad_screenshot.png)`
 
 ---
 
-## 🧰 Local Development
+## 📦 weRepo – Discover Projects On-Chain
 
-```bash
+Every deployed project is automatically listed in the `weRepo`:
+
+- Projects are organized by wallet address
+- Clicking a project reveals its theme, microdApp cards, and creator info
+- Each microdApp card links to its live contract instance, themed and ready
+
+```text
+http://localhost:5173/we-repo/<wallet_address>
+http://localhost:5173/we-dao/<app_id>
+📸 Repo Preview
+Add your screenshot or GIF here
+![alt text](werepo_screenshot.png)
+
+🌈 Fully Customizable UI & Theming
+The entire user interface is dynamically themed based on your project’s palette — no CSS overrides required.
+
+🎨 Projects look unique by default
+
+💫 Interfaces update in real time based on your selection
+
+🧰 Local Development
+bash
+Copy
+Edit
 # Clone the project
 git clone https://github.com/your-org/weDev.git
 cd weDev
