@@ -168,17 +168,17 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
     projectData: IWeRepoProject
   ) => {
     const appClient = await getRepoApplicationClient();
-    try {
-      const optedIn = await appClient.state
-        .local(senderAddress)
-        ?.projectUsername();
-    } catch (error) {
-      await appClient.send.optIn.optInToApplication({
-        args: [],
-        sender: senderAddress,
-        signer: signer,
-      });
-    }
+    // try {
+    //   const optedIn = await appClient.state
+    //     .local(senderAddress)
+    //     ?.projectUsername();
+    // } catch (error) {
+    //   await appClient.send.optIn.optInToApplication({
+    //     args: [],
+    //     sender: senderAddress,
+    //     signer: signer,
+    //   });
+    // }
 
     await appClient.send.createNewProject({
       args: [
