@@ -31,9 +31,9 @@ The Launchpad is the entry point for every project. Users can:
 
 All configurations are stored on-chain via a registry contract. No backend. No centralized storage.
 
-📸 **Interface Preview**  
-_Add your screenshot or GIF here_  
-`![Launchpad Screenshot](launchpad_screenshot.png)`
+📸 **Interface Preview**
+
+![Launchpad Screenshot](launchpad_screenshot.png)
 
 ---
 
@@ -45,24 +45,30 @@ Every deployed project is automatically listed in the `weRepo`:
 - Clicking a project reveals its theme, microdApp cards, and creator info
 - Each microdApp card links to its live contract instance, themed and ready
 
-```text
-http://localhost:5173/we-repo/<wallet_address>
-http://localhost:5173/we-dao/<app_id>
-📸 Repo Preview
-Add your screenshot or GIF here
-![alt text](werepo_screenshot.png)
+http://localhost:5173/we-repo/<wallet_address> http://localhost:5173/we-dao/<app_id>
 
-🌈 Fully Customizable UI & Theming
-The entire user interface is dynamically themed based on your project’s palette — no CSS overrides required.
-
-🎨 Projects look unique by default
-
-💫 Interfaces update in real time based on your selection
-
-🧰 Local Development
-bash
+yaml
 Copy
 Edit
+
+📸 **Repo Preview**
+
+![weRepo Screenshot](werepo_screenshot.png)
+
+---
+
+## 🌈 Fully Customizable UI & Theming
+
+The entire user interface is dynamically themed based on your project’s palette — no CSS overrides required.
+
+- 🎨 Projects look unique by default
+- 💫 Interfaces update in real time based on your selection
+
+---
+
+## 🧰 Local Development
+
+```bash
 # Clone the project
 git clone https://github.com/your-org/weDev.git
 cd weDev
@@ -79,11 +85,11 @@ Node.js ≥ 18
 AlgoKit CLI installed and configured
 
 🔮 Coming Soon
-🏆 Gamification: Earn badges and achievements as you launch and interact
+🏆 Gamification – Earn badges and achievements as you launch and interact
 
-📦 MicrodApp SDK: Submit your own DAO or tool to the microdApp library
+📦 MicrodApp SDK – Submit your own DAO or tool to the microdApp library
 
-📊 Analytics: View engagement and voting activity directly from your dashboard
+📊 Analytics – View engagement and voting activity directly from your dashboard
 
 weDev is more than a toolkit — it’s a gateway to accessible, permissionless Web3 creation.
 Customize. Deploy. Own it.
