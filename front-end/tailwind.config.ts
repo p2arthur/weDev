@@ -34,6 +34,16 @@ export default {
         ],
         display: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
       },
+      keyframes: {
+        gradientShift: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+      },
+      animation: {
+        gradient: "gradientShift 6s ease infinite",
+      },
     },
   },
   plugins: [],

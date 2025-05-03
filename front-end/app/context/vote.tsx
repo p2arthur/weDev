@@ -14,7 +14,7 @@ interface VoteContextType {
   activeProposals: Proposal[];
   setActiveProposals: (proposals: Proposal[]) => void;
   setAllProposals: (proposals: Proposal[]) => void;
-  createProposal: (proposal: Proposal) => void;
+  createProposal: (proposal: Proposal, dappId: number) => void;
   vote: (
     proposalId: number,
     vote: boolean,
@@ -39,7 +39,7 @@ const VoteProvider: React.FC<{ children: React.ReactNode }> = ({
     null
   );
 
-  const createProposal = async (proposal: Proposal) => {
+  const createProposal = async (proposal: Proposal, dappId: number) => {
     try {
       await createProposalContract({
         title: proposal.title,
@@ -47,8 +47,9 @@ const VoteProvider: React.FC<{ children: React.ReactNode }> = ({
         proposerAddress: activeAccount?.address || "",
         expiresIn: proposal.expiresIn,
         transactionSigner: transactionSigner,
+        dappId,
       }).then(() => {
-        getProposals().then((proposals: Proposal[]) => {
+        getProposals(dappId).then((proposals: Proposal[]) => {
           setAllProposals(proposals);
         });
       });
@@ -83,7 +84,7 @@ const VoteProvider: React.FC<{ children: React.ReactNode }> = ({
         });
       }
       // Refresh proposals after voting
-      const proposals = await getProposals();
+      const proposals = await getProposals(proposalId);
       setAllProposals(proposals);
     } catch (error) {
       console.error(error);

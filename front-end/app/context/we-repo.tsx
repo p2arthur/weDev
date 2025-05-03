@@ -3,6 +3,7 @@ import { I } from "node_modules/framer-motion/dist/types.d-B50aGbjN";
 import { createContext, useState, ReactNode, useContext } from "react";
 import { getRepoApplicationClient } from "~/contract-methods/repository-contract/get-client";
 import decodeProjectData from "~/contract-methods/repository-contract/utils/decodeProjectData";
+import { pinJsonToIPFS } from "~/utils/pinJsonToIPFS";
 
 export interface IWeRepoLocalStorage {
   project_username: string | undefined;
@@ -75,19 +76,19 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
         // Get the box value using the raw name
         const boxValue = await appClient.appClient.getBoxValue(box.nameRaw);
 
-        const projectUserLocalState = await getUserLocalStorage(addressString);
+        // const projectUserLocalState = await getUserLocalStorage(addressString);
 
         const project = await decodeProjectData(boxValue, appClient);
         project.creator_address = addressString; // Set the creator address
-        project.background_color = Number(
-          projectUserLocalState.background_color!
-        );
-        project.primary_color = Number(projectUserLocalState.primary_color!);
-        project.secondary_color = Number(
-          projectUserLocalState.secondary_color!
-        );
-        project.accent_color = Number(projectUserLocalState.accent_color!);
-        project.project_username = projectUserLocalState.project_username!;
+        // project.background_color = Number(
+        //   projectUserLocalState.background_color!
+        // );
+        // project.primary_color = Number(projectUserLocalState.primary_color!);
+        // project.secondary_color = Number(
+        //   projectUserLocalState.secondary_color!
+        // );
+        // project.accent_color = Number(projectUserLocalState.accent_color!);
+        // project.project_username = projectUserLocalState.project_username!;
         project.project_name = project.project_name || "Unnamed Project";
 
         allProjects.push(project);
@@ -168,21 +169,22 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
     projectData: IWeRepoProject
   ) => {
     const appClient = await getRepoApplicationClient();
-    // try {
-    //   const optedIn = await appClient.state
-    //     .local(senderAddress)
-    //     ?.projectUsername();
-    // } catch (error) {
-    //   await appClient.send.optIn.optInToApplication({
-    //     args: [],
-    //     sender: senderAddress,
-    //     signer: signer,
-    //   });
-    // }
+    try {
+      // const optedIn = await appClient.state
+      //   .local(senderAddress)
+      //   ?.projectUsername();
+      // await appClient.send.optIn.optInToApplication({
+      //   args: [],
+      //   sender: senderAddress,
+      //   signer: signer,
+      // });
+    } catch (error) {}
+    const ipfs = await pinJsonToIPFS(projectData);
 
+    console.log("IPFS:", ipfs);
     await appClient.send.createNewProject({
       args: [
-        projectData.project_name,
+        ipfs,
         projectData.project_username || "",
         projectData.primary_color,
         projectData.background_color,

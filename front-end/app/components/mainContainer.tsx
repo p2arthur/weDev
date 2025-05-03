@@ -12,10 +12,9 @@ import { IWeRepoLocalStorage } from "~/context/we-repo";
 
 interface MainContainerProps {
   dappId: number;
-  localStorage: IWeRepoLocalStorage;
 }
 
-export function MainContainer({ dappId, localStorage }: MainContainerProps) {
+export function MainContainer({ dappId }: MainContainerProps) {
   const tabOptions: TabOptionInterface[] = [
     {
       label: "All",
@@ -43,6 +42,8 @@ export function MainContainer({ dappId, localStorage }: MainContainerProps) {
 
   async function loadProposals(): Promise<Proposal[]> {
     const proposals = await getProposals(Number(dappId));
+
+    console.log("proposals", proposals);
     const rewardProposals = await getRewardProposals();
     return [...proposals, ...rewardProposals];
   }
@@ -78,7 +79,7 @@ export function MainContainer({ dappId, localStorage }: MainContainerProps) {
           <AnimButton
             color={String(localStorage?.primary_color || "#3db2ff")}
             onClick={() => {
-              navigate(`/we-dao/create/${dappId}`);
+              navigate(`dapp/we-dao/create/${dappId}`);
             }}
           >
             Create
@@ -89,7 +90,6 @@ export function MainContainer({ dappId, localStorage }: MainContainerProps) {
         <ProposalList
           proposals={proposalList.sort((a, b) => b.expiresIn - a.expiresIn)}
           loadingProposals={loadingProposals}
-          localStorage={localStorage}
         />
       </div>
     </div>

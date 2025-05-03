@@ -1,28 +1,17 @@
-import { MetaFunction, useParams } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import { Footer } from "~/components/footer";
+import { Outlet, useParams } from "@remix-run/react";
 import { Header } from "~/components/header";
 import { Hero } from "~/components/hero";
-import { MainContainer } from "~/components/mainContainer";
-import { VoteModal } from "~/components/voteModal";
-import { WalletConnectionModal } from "~/components/walletConnectModal";
-import { IWeRepoLocalStorage, useWeRepo } from "~/context/we-repo";
 import * as algokit from "@algorandfoundation/algokit-utils";
 import algosdk from "algosdk";
+import { color } from "framer-motion";
+import { useEffect, useState } from "react";
+import { useWeRepo, IWeRepoLocalStorage } from "~/context/we-repo";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "weDAO" },
-    { name: "Community DAO tools for everyone!", content: "weDAO" },
-  ];
-};
-
-export default function Index() {
-  const [projectLocalStorage, setProjectLocalStorage] =
-    useState<IWeRepoLocalStorage>();
-
+export default function DappLayout() {
   const { dappId } = useParams();
   const { getUserLocalStorage } = useWeRepo();
+  const [projectLocalStorage, setProjectLocalStorage] =
+    useState<IWeRepoLocalStorage>();
 
   const appendUserProjectData = async () => {
     const algorand = algokit.AlgorandClient.testNet();
@@ -68,18 +57,25 @@ export default function Index() {
   }, []);
 
   return (
-    <div className="h-screen space-y-5 mx-6 justify-center ">
-      <Header />
-      <div className="flex flex-col pt-10">
-        <Hero />
-        <MainContainer
-          localStorage={projectLocalStorage!}
-          dappId={Number(dappId)}
-        />
-      </div>
-      <Footer />
-      <WalletConnectionModal />
-      <VoteModal />
+    <div
+      className="min-h-screen flex flex-col"
+      style={
+        {
+          "--background": projectLocalStorage?.background_color,
+          "--primary": projectLocalStorage?.primary_color,
+          "--secondary": projectLocalStorage?.secondary_color,
+          "--accent": projectLocalStorage?.accent_color,
+        } as React.CSSProperties
+      }
+    >
+      <Header projectName="$MONKO" />
+      <main className="flex-grow">
+        <Outlet /> {/* This renders the child route */}
+      </main>
+
+      <footer className="bg-gray-800 text-white p-4 text-center">
+        &copy; 2025 My App
+      </footer>
     </div>
   );
 }

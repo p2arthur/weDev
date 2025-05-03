@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { Footer } from "~/components/footer";
 import { Header } from "~/components/header";
+import MicroDappCard from "~/components/we-repo/MicroDappCard";
 import { useWeRepo } from "~/context/we-repo";
 import roundWalletAddress from "~/utils/roundWalletAddress";
 
@@ -83,20 +84,7 @@ export default function WalletPage() {
 
             <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
               {userProject?.project_dapp_ids?.map((dappId, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.1 }}
-                  className="p-6 rounded-2xl shadow-lg flex flex-col justify-between cursor-pointer bg-[var(--primary)] text-black hover:bg-[var(--primary)] transition"
-                  onClick={() => {
-                    navigate(`/we-dao/${dappId}`);
-                  }}
-                >
-                  <h3 className="text-lg font-bold">Microdapp ID</h3>
-                  <p className="text-sm mt-2">{dappId}</p>
-                </motion.div>
+                <MicroDappCard key={index} dappId={dappId} />
               ))}
             </div>
           </motion.div>

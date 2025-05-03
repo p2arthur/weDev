@@ -58,36 +58,10 @@ export default function AllReposPage() {
               {projectsList.map((project, index) => (
                 <motion.div
                   key={index}
-                  initial={
-                    {
-                      opacity: 0,
-                      y: 20,
-                      "--background": color(project.background_color),
-                      "--primary": color(project.primary_color),
-                      "--secondary": color(project.secondary_color),
-                      "--accent": color(project.accent_color),
-                    } as any
-                  }
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    "--background": color(project.background_color),
-                    "--primary": color(project.primary_color),
-                    "--secondary": color(project.secondary_color),
-                    "--accent": color(project.accent_color),
-                  }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.5 }}
-                  className="flex flex-col bg-white/10 hover:scale-105 backdrop-blur-lg rounded-3xl p-8 shadow-xl text-center border-2 border-transparent transition-all hover:border-[var(--primary)] hover:text-white cursor-pointer"
+                  className="flex flex-col bg-white/10 hover:scale-105 backdrop-blur-lg overflow-hidden rounded-3xl p-8 shadow-xl text-center border-2 border-transparent transition-all hover:border-[var(--primary)] hover:text-white cursor-pointer"
                   onClick={() => navigate(`${project.creator_address}`)}
-                  style={
-                    {
-                      "--background": color(project.background_color),
-                      "--primary": color(project.primary_color),
-                      "--secondary": color(project.secondary_color),
-                      "--accent": color(project.accent_color),
-                    } as React.CSSProperties
-                  }
                 >
                   {/* Project Header */}
                   <div className="flex flex-col gap-2 mb-6">
