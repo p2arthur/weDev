@@ -35,7 +35,7 @@ export function ProposalList({
         </div>
       ) : null}
 
-      {loadingProposals ? (
+      {loadingProposals && proposals.length === 0 ? (
         <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
           {Array.from({ length: 10 }).map((_, index) => (
             <div className="bg-[linear-gradient(270deg,#f9a826,#00f5c0,#ff92e5)] opacity-10 h-64 bg-[length:600%_600%] animate-gradient rounded-2xl shadow-md w-full"></div>

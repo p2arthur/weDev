@@ -15,6 +15,7 @@ import {
 } from "../contract-methods/reward-contract/user";
 import { useToast } from "./toast";
 import { motion } from "framer-motion";
+import { useProjectLocalStorage } from "~/routes/dapp";
 
 interface ProposalCardProps {
   proposal: Proposal;
@@ -26,6 +27,8 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   const [proposalAsset, setProposalAsset] = useState<any>();
   const { activeAccount, transactionSigner } = useWallet();
   const { getAssetById } = useAsaMetadata();
+  const { loadingProjectLocalStorage, projectLocalStorage } =
+    useProjectLocalStorage();
   const [userHasVoted, setUserHasVoted] = useState<boolean>(false);
   const [userClaimedRewards, setUserClaimedRewards] = useState<boolean>(false);
   const [countdown, setCountdown] = useState("");
@@ -83,13 +86,21 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
   };
 
   useEffect(() => {
-    setLoadingProposal(true);
-    getProposalAssetData();
-    getUserVoteData();
-    setLoadingProposal(false);
+    const loadProposal = async () => {
+      setLoadingProposal(true);
+      try {
+        await Promise.all([getProposalAssetData(), getUserVoteData()]);
+      } catch (error) {
+        console.error("Error loading proposal data:", error);
+      } finally {
+        setLoadingProposal(false);
+      }
+    };
+
+    loadProposal();
 
     const updateCountdown = () => {
-      const now = Math.floor(Date.now() / 1000); // current time in seconds
+      const now = Math.floor(Date.now() / 1000);
       const remaining = proposal.expiresIn - now;
 
       if (remaining <= 0) {
@@ -97,6 +108,7 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
         return;
       }
 
+      const parts = [];
       const months = Math.floor(remaining / (30 * 24 * 3600));
       const weeks = Math.floor(
         (remaining % (30 * 24 * 3600)) / (7 * 24 * 3600)
@@ -106,7 +118,6 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
       const minutes = Math.floor((remaining % 3600) / 60);
       const seconds = remaining % 60;
 
-      const parts = [];
       if (months > 0) parts.push(`${months}mo`);
       if (weeks > 0) parts.push(`${weeks}w`);
       if (days > 0) parts.push(`${days}d`);
@@ -117,11 +128,10 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
       setCountdown(parts.join(" "));
     };
 
-    updateCountdown(); // initial render
-    const interval = setInterval(updateCountdown, 1000); // every 1s
-
-    return () => clearInterval(interval); // clean up on unmount
-  }, [proposal, displayVoteModal, activeAccount]);
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, [proposal, activeAccount?.address]);
 
   async function onClickClaim(): Promise<void> {
     await claimRewards({
@@ -141,7 +151,11 @@ export const ProposalCard = ({ proposal }: ProposalCardProps) => {
 
   return (
     <motion.div
-      className="bg-[linear-gradient(270deg,#f9a826,#00f5c0,#ff92e5)] bg-[length:600%_600%] animate-gradient rounded-2xl"
+      className={`${
+        loadingProjectLocalStorage
+          ? "bg-[linear-gradient(270deg,#f9a826,#00f5c0,#ff92e5)] bg-[length:600%_600%] max-w-xl animate-gradient"
+          : "bg-[var(--primary-color)]"
+      } rounded-2xl`}
       key={proposal.id}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

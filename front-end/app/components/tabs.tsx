@@ -33,8 +33,8 @@ export const Tabs: React.FC<TabsPropsInterface> = ({
           className={`py-2 px-6 cursor-pointer text-background text-xl md:text-2xl  flex items-center
             ${
               activeTab.label === option.label
-                ? "bg-secondary font-display rounded-full font-bold"
-                : `bg-primary/50 rounded-full text-black hover:text-background ${
+                ? "bg-[var(--background)] font-display rounded-full font-bold"
+                : `bg-[var(--secondary)] rounded-full text-black hover:text-background ${
                     option.enabled ? "cursor-pointer" : "cursor-not-allowed"
                   }`
             }`}

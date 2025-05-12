@@ -80,15 +80,7 @@ const WeRepoProvider = ({ children }: { children: ReactNode }) => {
 
         const project = await decodeProjectData(boxValue, appClient);
         project.creator_address = addressString; // Set the creator address
-        // project.background_color = Number(
-        //   projectUserLocalState.background_color!
-        // );
-        // project.primary_color = Number(projectUserLocalState.primary_color!);
-        // project.secondary_color = Number(
-        //   projectUserLocalState.secondary_color!
-        // );
-        // project.accent_color = Number(projectUserLocalState.accent_color!);
-        // project.project_username = projectUserLocalState.project_username!;
+
         project.project_name = project.project_name || "Unnamed Project";
 
         allProjects.push(project);

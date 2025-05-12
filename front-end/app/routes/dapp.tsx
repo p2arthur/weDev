@@ -1,4 +1,4 @@
-import { Outlet, useParams } from "@remix-run/react";
+import { Outlet, useOutletContext, useParams } from "@remix-run/react";
 import { Header } from "~/components/header";
 import { Hero } from "~/components/hero";
 import * as algokit from "@algorandfoundation/algokit-utils";
@@ -6,12 +6,15 @@ import algosdk from "algosdk";
 import { color } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useWeRepo, IWeRepoLocalStorage } from "~/context/we-repo";
+import { Footer } from "~/components/footer";
 
 export default function DappLayout() {
   const { dappId } = useParams();
   const { getUserLocalStorage } = useWeRepo();
   const [projectLocalStorage, setProjectLocalStorage] =
     useState<IWeRepoLocalStorage>();
+  const [loadingProjectLocalStorage, setLoadingProjectLocalStorage] =
+    useState(true);
 
   const appendUserProjectData = async () => {
     const algorand = algokit.AlgorandClient.testNet();
@@ -50,6 +53,8 @@ export default function DappLayout() {
     };
 
     setProjectLocalStorage(mappedLocalStorage);
+
+    setLoadingProjectLocalStorage(false);
   };
 
   useEffect(() => {
@@ -70,12 +75,20 @@ export default function DappLayout() {
     >
       <Header projectName="$MONKO" />
       <main className="flex-grow">
-        <Outlet /> {/* This renders the child route */}
+        <Outlet context={{ projectLocalStorage, loadingProjectLocalStorage }} />{" "}
+        {/* This renders the child route */}
       </main>
 
-      <footer className="bg-gray-800 text-white p-4 text-center">
-        &copy; 2025 My App
-      </footer>
+      <Footer />
     </div>
   );
+}
+
+type ContextType = {
+  projectLocalStorage?: IWeRepoLocalStorage;
+  loadingProjectLocalStorage: boolean;
+};
+
+export function useProjectLocalStorage() {
+  return useOutletContext<ContextType>();
 }

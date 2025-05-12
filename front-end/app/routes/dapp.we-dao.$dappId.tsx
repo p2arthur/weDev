@@ -22,7 +22,6 @@ export default function Index() {
     useState<IWeRepoLocalStorage>();
 
   const { dappId } = useParams();
-  const { getUserLocalStorage } = useWeRepo();
 
   return (
     <div className="h-screen space-y-5 mx-6 justify-center ">
