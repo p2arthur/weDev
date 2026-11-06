@@ -1,96 +1,58 @@
-# 🛠️ weDev — Launch Web3 Projects with Zero Friction
+# weDev
 
-**weDev** is an open-source toolkit that lets anyone launch fully customizable microdApps on the Algorand blockchain — no backend, no smart contract experience needed.
+**Configurable DAO interfaces and project registries on Algorand.**
 
-Built during the Castell D’Code Retreat with support from the Algorand Foundation and powered by AlgoKit 3.0, weDev enables creators to deploy DAOs, staking modules, and more in just a few clicks. Everything runs through a decentralized registry contract — making the experience fully trustless and developer-free by default.
+weDev explores a modular way to assemble small Web3 applications: a wallet-connected interface, reusable governance contracts, a registry for project configuration, and token launch experiments. Projects can carry their own names, links, and color palettes through the interface.
 
-Led by **Arthur Rabelo** (Web3 Engineer) and **Kieran Nelson** (Senior Web3 Engineer), the project combines deep blockchain engineering with clean and intuitive user experience.
+Built during the Castell D'Code Retreat with support from the Algorand Foundation, led by Arthur Rabelo and Kieran Nelson.
 
----
+![weDev launchpad interface](launchpad_screenshot.png)
 
-## 🚀 What You Can Do with weDev
+## Explore the modules
 
-- Launch projects in minutes with a simple form: enter your project name, pick theme colors, and select which tools you want.
-- Instantly deploy modular microdApps like:
-  - 🧩 **Holders DAO** – Voting power based on wallet holdings
-  - 🎯 **Rewards DAO** – Incentives for community engagement
-  - 🔒 **Staking Pools** _(coming soon)_ – Lock tokens, earn rewards
-- Customize your project interface with your own color palette (background, primary, secondary, accent)
-- Interact through integrated wallets: **Pera**, **Defly**, and **Lute**
+| Module | Source | Focus |
+| --- | --- | --- |
+| Frontend | [`front-end/`](front-end/) | Remix routes, wallet integration, project themes, and DAO screens |
+| weDAO | [`we_dao/`](we_dao/) | Yes/no governance and reward-governance contracts |
+| weRepo | [`we_repo/`](we_repo/) | On-chain project registry and configuration |
+| weLaunch | [`we_launch/`](we_launch/) | Token and token-factory contract experiments |
 
----
+The frontend includes proposal forms, voting interfaces, wallet-address project views, and themed dApp routes. Pera, Defly, and Lute are configured in the wallet provider.
 
-## 🧷 Launchpad – Deploy with Style
+## Run the frontend
 
-The Launchpad is the entry point for every project. Users can:
+Use **Node.js 22+** and **npm 10.9+**. The npm application is inside `front-end`, rather than at the repository root.
 
-- Name their project
-- Choose custom UI colors (background, primary, secondary, accent)
-- Select one or more microdApps to include
-- Deploy everything to Algorand in one click
-
-All configurations are stored on-chain via a registry contract. No backend. No centralized storage.
-
-📸 **Interface Preview**
-
-![Launchpad Screenshot](launchpad_screenshot.png)
-
----
-
-## 📦 weRepo – Discover Projects On-Chain
-
-Every deployed project is automatically listed in the `weRepo`:
-
-- Projects are organized by wallet address
-- Clicking a project reveals its theme, microdApp cards, and creator info
-- Each microdApp card links to its live contract instance, themed and ready
-
-http://localhost:5173/we-repo/<wallet_address> http://localhost:5173/we-dao/<app_id>
-
-yaml
-Copy
-Edit
-
-📸 **Repo Preview**
-
-![weRepo Screenshot](werepo_screenshot.png)
-
----
-
-## 🌈 Fully Customizable UI & Theming
-
-The entire user interface is dynamically themed based on your project’s palette — no CSS overrides required.
-
-- 🎨 Projects look unique by default
-- 💫 Interfaces update in real time based on your selection
-
----
-
-## 🧰 Local Development
-
-```bash
-# Clone the project
-git clone https://github.com/your-org/weDev.git
-cd weDev
-
-# Install dependencies
-npm install
-
-# Run the dev server
+```sh
+git clone https://github.com/p2arthur/weDev.git
+cd weDev/front-end
+npm ci
+cp .env.example .env
 npm run dev
-Make sure you have:
-
-Node.js ≥ 18
-
-AlgoKit CLI installed and configured
-
-🔮 Coming Soon
-🏆 Gamification – Earn badges and achievements as you launch and interact
-
-📦 MicrodApp SDK – Submit your own DAO or tool to the microdApp library
-
-📊 Analytics – View engagement and voting activity directly from your dashboard
-
-weDev is more than a toolkit — it’s a gateway to accessible, permissionless Web3 creation.
-Customize. Deploy. Own it.
 ```
+
+Open the URL printed by Remix/Vite. Review `.env`, [`app/services/providers.tsx`](front-end/app/services/providers.tsx), and the contract-call modules before using a wallet. The checked-in wallet provider selects MainNet while the example environment references a TestNet API; align the wallet, clients, assets, and application IDs for your chosen network.
+
+The registry integration also reads `VITE_REPO_CONTRACT_APP_ID`, which is not included in the base example. Browser-exposed `VITE_` variables must not hold private service credentials.
+
+## Contract workspaces
+
+Each contract module has its own AlgoKit configuration, scripts, and dependencies. Begin with the [weDAO workspace](we_dao/README.md), [registry workspace](we_repo/README.md), or [launch workspace](we_launch/README.md). Contract development and frontend development are separate setup paths.
+
+## Development commands
+
+Run these from `front-end`:
+
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the Remix development server |
+| `npm run typecheck` | Check TypeScript |
+| `npm run lint` | Run ESLint |
+| `npm run build` | Build the Remix application |
+| `npm start` | Serve a completed build |
+
+## Project status
+
+This is a retreat prototype with implemented governance and registry components. The launchpad's project-creation handler is unfinished, so the interface should not be described as a complete one-click deployment product. Staking pools, analytics, and a public microdApp SDK remain ideas rather than shipped features.
+
+![weDev project registry interface](werepo_screenshot.png)
